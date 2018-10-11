@@ -1,0 +1,250 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!-- EXTENSION UUID-OSSP -->
+    <!--This extension is used to generate UUIDs-->
+    <!--https://en.wikipedia.org/wiki/Universally_unique_identifier-->
+    <changeSet id="1" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <!--USER_ACCOUNT -->
+    <changeSet id="2" author="rodrigo" dbms="postgresql">
+        <createTable tableName="user_accounts">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" primaryKeyName="pk_user_account" nullable="false"/>
+            </column>
+            <column name="email" type="text">
+                <constraints nullable="false" unique="true" uniqueConstraintName="unq_user_account_email"/>
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cell_phone" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="postal_code" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="province" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="buzzer" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--CATEGORIES-->
+    <changeSet id="3" author="rodrigo" dbms="postgresql">
+        <createTable tableName="categories">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" primaryKeyName="pk_categories" nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--MANUFACTURERS-->
+    <changeSet id="4" author="rodrigo" dbms="postgresql">
+        <createTable tableName="manufacturers">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" primaryKeyName="pk_manufacturers" nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--INGREDIENTS-->
+    <changeSet id="5" author="rodrigo" dbms="postgresql">
+        <createTable tableName="ingredients">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" primaryKeyName="pk_ingredients" nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--PRODUCTS-->
+    <changeSet id="6" author="rodrigo" dbms="postgresql">
+        <createTable tableName="products">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" primaryKeyName="pk_products" nullable="false"/>
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manufacturer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_url" type="text"/>
+            <column name="mainingredient_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weight_kg" type="numeric(18, 3)"/>
+            <column name="price" type="numeric(18, 3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="numeric(18, 0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="category_id"
+                constraintName="fk_products_categories"
+                referencedTableName="categories"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="mainingredient_id"
+                constraintName="fk_products_ingredients"
+                referencedTableName="ingredients"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="manufacturer_id"
+                constraintName="fk_products_manufacturers"
+                referencedTableName="manufacturers"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="7" author="rodrigo" dbms="postgresql">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            INSERT INTO categories VALUES (default, 'Canned Food');
+            INSERT INTO categories VALUES (default, 'Dry Food');
+            INSERT INTO categories VALUES (default, 'Food Toppers');
+            INSERT INTO categories VALUES (default, 'Fresh Food');
+            INSERT INTO categories VALUES (default, 'Frozen Food');
+            INSERT INTO categories VALUES (default, 'Milk Replacers');
+        </sql>
+    </changeSet>
+
+    <changeSet id="8" author="rodrigo" dbms="postgresql">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            INSERT INTO manufacturers VALUES (default, 'Beneful');
+            INSERT INTO manufacturers VALUES (default, 'Blue Buffalo');
+            INSERT INTO manufacturers VALUES (default, 'Castor And Pollux');
+            INSERT INTO manufacturers VALUES (default, 'Cesar');
+            INSERT INTO manufacturers VALUES (default, 'Eukanuba');
+            INSERT INTO manufacturers VALUES (default, 'Freshpet');
+            INSERT INTO manufacturers VALUES (default, 'GNC Pets');
+            INSERT INTO manufacturers VALUES (default, 'Good Natured');
+            INSERT INTO manufacturers VALUES (default, 'Grreat Choice');
+            INSERT INTO manufacturers VALUES (default, 'HALO');
+            INSERT INTO manufacturers VALUES (default, 'Hill''s Science Diet');
+            INSERT INTO manufacturers VALUES (default, 'Iams');
+            INSERT INTO manufacturers VALUES (default, 'Natural Balance');
+            INSERT INTO manufacturers VALUES (default, 'Nature''s Variety Instinct');
+            INSERT INTO manufacturers VALUES (default, 'Nulo');
+            INSERT INTO manufacturers VALUES (default, 'Nutrience');
+            INSERT INTO manufacturers VALUES (default, 'NUTRO');
+            INSERT INTO manufacturers VALUES (default, 'Nutro Ultra');
+            INSERT INTO manufacturers VALUES (default, 'Only Natural Pet');
+            INSERT INTO manufacturers VALUES (default, 'Pedigree');
+            INSERT INTO manufacturers VALUES (default, 'PetAg');
+            INSERT INTO manufacturers VALUES (default, 'Purina');
+            INSERT INTO manufacturers VALUES (default, 'Purina Dog Chow');
+            INSERT INTO manufacturers VALUES (default, 'Purina ONE');
+            INSERT INTO manufacturers VALUES (default, 'Purina Pro Plan');
+            INSERT INTO manufacturers VALUES (default, 'Red Leaf');
+            INSERT INTO manufacturers VALUES (default, 'Rollover');
+            INSERT INTO manufacturers VALUES (default, 'Royal Canin');
+            INSERT INTO manufacturers VALUES (default, 'Simply Nourish');
+            INSERT INTO manufacturers VALUES (default, 'Wellness');
+            INSERT INTO manufacturers VALUES (default, 'Wild Frontier');
+        </sql>
+    </changeSet>
+
+    <changeSet id="9" author="rodrigo" dbms="postgresql">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            INSERT INTO ingredients VALUES (default, 'Chicken');
+            INSERT INTO ingredients VALUES (default, 'Chicken And Rice');
+            INSERT INTO ingredients VALUES (default, 'Chicken And Vegetables');
+            INSERT INTO ingredients VALUES (default, 'Chicken And Vegetable Stew');
+            INSERT INTO ingredients VALUES (default, 'Beef');
+            INSERT INTO ingredients VALUES (default, 'Lamb');
+            INSERT INTO ingredients VALUES (default, 'Lamb And Rice');
+            INSERT INTO ingredients VALUES (default, 'Lamb And Vegetable Stew');
+            INSERT INTO ingredients VALUES (default, 'Turkey');
+            INSERT INTO ingredients VALUES (default, 'Turkey Stew');
+            INSERT INTO ingredients VALUES (default, 'Turkey And Sweet Potato');
+            INSERT INTO ingredients VALUES (default, 'Turkey, Pea, Duck and Salmon');
+            INSERT INTO ingredients VALUES (default, 'Fish');
+            INSERT INTO ingredients VALUES (default, 'Fish And Potato');
+            INSERT INTO ingredients VALUES (default, 'Duck');
+            INSERT INTO ingredients VALUES (default, 'Beef And Chicken');
+            INSERT INTO ingredients VALUES (default, 'Sweet Potato');
+            INSERT INTO ingredients VALUES (default, 'Salmon');
+            INSERT INTO ingredients VALUES (default, 'Goat Milk');
+            INSERT INTO ingredients VALUES (default, 'Skim Milk');
+        </sql>
+    </changeSet>
+
+    <changeSet id="10" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            INSERT INTO products VALUES (default, 2, 1, 'Purina Beneful Healthy Weight Adult Dog Food', 'Help your dog to achieve and maintain his ideal weight by serving him Purina Beneful Healthy Weight Dog Food. This delicious dry blend features the taste of real chicken as the #1 ingredient, and offers calorie-smart nutrition that will allow your pup to maintain a healthy weight and an active lifestyle as a result.', '1000.png', 1, 14, 25.59, 25);
+            INSERT INTO products VALUES (default, 2, 1, 'Purina Beneful IncrediBites Roasted Turkey Small Breed Adult Dog Food', 'Make sure your dog receives the nutrients he needs to thrive and lead a healthy, happy life by serving him these Purina Beneful brand Dog Food Turkey IncrediBites, which feature protein-rich nutrition in each bite thanks to the turkey and chicken meal ingredients, which help your favourite pup develop strong, lean muscles. The food contains sources of calcium for strong bones and teeth and each piece of kibble is bite-sized, making it easy to chew.', '1001.png', 9, 1.6, 6.79, 5);
+            INSERT INTO products VALUES (default, 2, 1, 'Purina Beneful IncrediBites Roasted Chicken Small Breed Adult Dog Food', 'Feed your dog a protein- and nutrient-rich meal with this Purina Beneful brand Dog Food Chicken IncrediBites, which is made with mouth-watering chicken meal for a delicious roasted chicken flavour and strong, lean muscle development. Wholesome grains help deliver the energy your dog needs to thrive throughout his day, and included calcium from ingredients like yogourt helps your pooch achieve strong bones and a healthy smile.', '1002.png', 1, 1.6, 6.79, 15);
+            INSERT INTO products VALUES (default, 1, 18, 'Nutro Ultra Bistro Mix Filet in Gravy Variety Pack Wet Dog Food - Grain Freen, Beef And Chicken', 'NUTRO ULTRA Grain Free Filets in Gravy Wet Dog Food serves up elevated recipes made for your puppies refined taste. Each of these grain free and appetizing entrees features a perfect pairing of high-quality protein and pieces of real vegetables - plus many are accented with a touch of an herb - to give your dog the ultimate flavour experience. NUTRO ULTRA Grain Free Filets in Gravy Wet Dog Food Entrees are always made with quality ingredients, carefully sourced from a trusted network of farmers and suppliers, and have no chicken by-product meal, corn, wheat, or soy, and no artificial flavours or preservatives. Bring the best of the menu to their bowl with NUTRO ULTRA Wet Food: passion for great food.', '1003.png', 16, 0.1, 29.99, 10);
+            INSERT INTO products VALUES (default, 1, 14, 'Natural Balance Limited Ingredient Diets Dog Food - Grain Free, Sweet Potato And Venison Formula', 'Formulated with a limited list of premium protein and carbohydrate sources, Natural Balance L.I.D. Limited Ingredient Diets Sweet Potato And Venison Formula dog food is excellent when you are seeking alternative ingredients for your pet. This grain-free dog food is also designed to maintain your dog''s digestive health while supporting healthy skin and a shiny, luxurious coat.', '1004.png', 17, 0.907, 1.99, 2);
+            INSERT INTO products VALUES (default, 4, 6, 'Freshpet Vital Grain Free Puppy Food', 'Freshpet Vital Grain Free Puppy Recipe with Sweet Potatoes and Spinach Dog Food features a ready to serve, refrigerated recipe made with fresh chicken, beef, salmon and egg, giving your dog the nutrition he needs to thrive. This delicious blend contains DHA for cognitive development and calcium to support healthy bone and joint development.', '1005.png', 16, .450, 14.99, 2);
+            INSERT INTO products VALUES (default, 4, 6, 'Freshpet Vital Grain Free Salmon And Ocean Whitefish Adult Dog Food', 'This dog food uses a salmon and ocean whitefish recipe to offer exceptional taste. Fruits and vegetables add essential vitamins and minerals for complete nutrition. Provide for your pet''s healthy diet with Freshpet Vital Recipes Dog Food. The natural ingredients include salmon and ocean whitefish, plus spinach, pomegranate and berries for a flavour that entices dogs. Fruits and vegetables offer complete nutrition by providing vitamins and minerals for a balanced meal. With ready-to-serve packaging, this food makes it easy to take optimal care of your animal. FRESHPET - PETS PEOPLE PLANET.', '1006.jpg', 18, .907, 14.99, 0);
+            INSERT INTO products VALUES (default, 3, 14, 'Nature''s Variety Instinct Raw Boost Mixers Dog Food Topper - Natural, Grain Free, Raw, Lamb', 'Top your dog''s kibble with the benefits of raw with Nature''s Variety Instinct Freeze Dried Raw Boost Mixers Grain Free Grass-Fed Lamb Recipe All Natural Dog Food Topper. Instinct Raw Boost Mixers Grass-Fed Lamb Recipe is the easiest way to put more of the pure, real nutrition of raw into every bowl.', '1007.png', 6, 0.156, 13.99, 20);
+            INSERT INTO products VALUES (default, 3, 14, 'Nature''s Variety Instinct Healthy Cravings Dog Food Topper - Natural, Grain Free, Salmon', 'Add the taste and variety to meal time that your dog craves with Nature''s Variety Instinct Healthy Cravings Grain Free Real Salmon Recipe Natural Wet Dog Food Topper. This delicious topper features the great taste of salmon, and makes the perfect complement to your dog''s meal.', '1008.png', 18, 0.085, 2.19, 21);
+            INSERT INTO products VALUES (default, 3, 29, 'Simply Nourish Meal Toppers Dog Food - Natural, Grain Free, Chicken', 'Make mealtime more exciting and delicious for your pooch by adding Simply Nourish 95% Chicken Meal Toppers to the mix. This delicious wet topper is made using only natural ingredients, are an excellent source of protein, and feature delicious beef flavour your dog will love.', '1009.png', 1, 0.368, 3.49, 59);
+            INSERT INTO products VALUES (default, 3, 9, 'Grreat Choice Dog Food', 'Treat your dog to the savory Flavour of Grreat Choice Porterhouse Flavour in Savory Juices Dog Food. This is one wet dog food your furry friend won''t soon forget, so make meal time special by serving this delicious blend. Only at PetSmart.', '1010.png', 1, 0.100, 0.79, 19);
+            INSERT INTO products VALUES (default, 3, 2, 'BLUE Wilderness Trail Toppers Grain Free Wild Cuts Dog Food Topper', 'Your pooch''s tail will wag with delight as he dives into these BLUE Wilderness Wild Cuts Chunky Salmon Bites in Hearty Gravy for Dogs, which feature chunky bites of salmon slathered in a savory gravy for a succulent flavour. Made with only natural ingredients, the recipe lets you deliver a wholesome addition to your dog''s meal. The bites contain no by-product meals, corn, soy or wheat or artificial flavours, colours or preservatives, so you can feel good about serving them to your dog.', '1011.png', 18, 0.079, 2.69, 51);
+            INSERT INTO products VALUES (default, 6, 7, 'GNC Pets Ultra Mega Premium Milk Replacer Goat''s Milk Puppy Supplement', 'Get your small, furry friends off to a great start with whole goat''s milk, loaded with essential nutrients needed just for puppies, found only in GNC Pets Premium Milk Replacer. GNC Pets Products are produced at the same highest quality standards as their human supplements and are dated to ensure that you are purchasing the freshest products available for the pets you love.', '1012.png', 20, 0.340, 39.99, 22);
+            INSERT INTO products VALUES (default, 6, 7, 'GNC Pets Ultra Mega Premium Milk Replacer Puppy Supplement', 'Get your small, furry friends off to a great start with wholesome nourishment of vitamins And minerals just for puppies, found only in GNC Pets Premium Milk Replacer. Made with natural milk proteins to support development of strong bones and a healthy immune system.', '1013.png', 20, 0.794, 69.99, 19);
+            INSERT INTO products VALUES (default, 6, 21, 'PetAg PetLac Puppy Powder Milk Replacement', 'Supply your orphaned or rejected newborn to 6-week old puppy the nutrition he needs with this PetAg PetLac Powder for Puppies. The milk replacement powder is fortified with FOS, naturally occurring microorganisms, vitamins, minerals and amino acids to enable proper growth and development.', '1014.png', 20, 0.380, 21.99, 3);
+            INSERT INTO products VALUES (default, 2, 29, 'Simply Nourish Adult Dog Food - Natural, Lamb And Oatmeal', 'We understand pet nutrition can be confusing and choosing the right food for your pet can be overwhelming. That''s why Simply Nourish Lamb And Oatmeal Recipe Adult Dog Food believes in making pet nutrition simple and understandable. By using carefully sourced, wholesome ingredients you''re already familiar with, such as real deboned lamb and an essential blend of vitamins and minerals, we''ve developed foods that are complete and balanced to help support your pet''s health, vitality and longevity. All of our ingredients are carefully selected from the best sources because your pet deserves the same quality of nutrition as you do.', '1015.png', 6, 6.8, 39.99, 29);
+            INSERT INTO products VALUES (default, 2, 30, 'Wellness CORE Healthy Weight Small Breed Dog Food - Grain Free', 'Wellness CORE Small Breed Healthy Weight Natural Grain Free Dry Dog Food is based on on the nutritional philosophy that pets, based on their primal ancestry, thrive on a natural diet mainly comprised of meat. Each bite is packed with a high concentration of quality animal protein along with nutrient-rich superfoods and added nutritional supplements. This unique, grain-free, filler-free food provides everything your small breed Dog needs to thrive, glucosamine And chondrotin sulfate to maintain bone And joint health. Formulated to help small breed Dogs maintain a healthy weight and feel full longer with optimum calorie And fibre levels.', '1016.png', 9, 1.8, 24.99, 10);
+            INSERT INTO products VALUES (default, 2, 29, 'Simply Nourish Source Adult Dog Food - Natural, Grain Free, Chicken Recipe', 'Simply Nourish Source high-protein foods are based on the source of what dogs thrived on for ages in the wild, before they were domesticated. We have created foods that are inspired by a dog''s original source of nutrition. Nutrient-dense and easy to digest, they offer an energy level your pet will thrive on and the essential amino acids necessary to help build strong muscles. Today''s dogs continue to prefer these protein-rich foods and find them wholly satisfying. Our high-protein formulas provide complete and balanced nutrition for your pet''s health and vitality.', '1017.png', 1, 2.2, 17.99, 2);
+            INSERT INTO products VALUES (default, 2, 8, 'Good Natured Grain Free Adult Dog Food - Natural, Lamb And Pea', 'Make meal time exciting with our delicious Good Natured Lamb And Pea Recipe Dog Food. Finding the right food for your adult dog is easy when you begin and end your search with Good Natured Dog Food. Great taste and healthy ingredients come together in this unique dry dog food.', '1018.png', 6, 6.3, 29.99, 10);
+            INSERT INTO products VALUES (default, 2, 14, 'Nature''s Variety Instinct Original Adult Dog Food - Natural, Grain Free, Raw, Chicken', 'Nature''s Variety Instinct Original Grain Free Recipe with Real Chicken Natural Dry Dog Food was created with a belief in the power of raw. High in animal protein, this grain-free recipe with real chicken will help to unlock your dog''s potential to thrive.', '1019.png', 1, 1.8, 24.99, 19);
+            INSERT INTO products VALUES (default, 2, 30, 'Wellness Complete Health Large Breed Adult Dog Food - Natural, Grain Free, Chicken And Chicken Meal', 'Wellness Complete Health Grain Free Large Breed Deboned Chicken, Chicken Meal Recipe Dry Dog Food provides the super nutrients adult dogs need to thrive. This delicious dry blend are formulated with a balanced blend of proteins, grain free carbs and select fats for the continued good health of your large breed dog.', '1020.png', 1, 5, 76.99, 16);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
