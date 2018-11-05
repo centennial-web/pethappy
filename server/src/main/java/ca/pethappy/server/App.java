@@ -1,32 +1,38 @@
 package ca.pethappy.server;
 
-import ca.pethappy.server.models.Category;
-import ca.pethappy.server.models.Ingredient;
-import ca.pethappy.server.repos.CategoriesRepo;
-import ca.pethappy.server.repos.IngredientsRepo;
+import ca.pethappy.server.security.models.TokenProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import javax.sql.DataSource;
-import java.util.List;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
+@EnableTransactionManagement
 @EnableJpaRepositories
 public class App implements CommandLineRunner {
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
 
-    private final DataSource dataSource;
-    private final CategoriesRepo categoriesRepo;
-    private final IngredientsRepo ingredientsRepo;
+    @Bean
+    @ConfigurationProperties(prefix = "security.token")
+    public TokenProperties tokenProperties() {
+        return new TokenProperties();
+    }
+
+    private final int serverPort;
+    private final String springApplicationName;
 
     @Autowired
-    public App(DataSource dataSource, CategoriesRepo categoriesRepo,
-               IngredientsRepo ingredientsRepo) {
-        this.dataSource = dataSource;
-        this.categoriesRepo = categoriesRepo;
-        this.ingredientsRepo = ingredientsRepo;
+    public App(@Value("${server.port}") int serverPort,
+               @Value("${spring.application.name}") String springApplicationName) {
+        this.serverPort = serverPort;
+        this.springApplicationName = springApplicationName;
     }
 
     public static void main(String[] args) {
@@ -34,19 +40,7 @@ public class App implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        System.out.println("DATASOURCE = " + dataSource);
-
-        Category ccc = categoriesRepo.findByName("Fresh Food");
-
-        List<Category> categories = categoriesRepo.findAll();
-        for (Category c : categories) {
-            System.out.println("Category: " + c.getName());
-        }
-
-        List<Ingredient> ingredients = ingredientsRepo.findAll();
-        for (Ingredient c : ingredients) {
-            System.out.println("Ingredient: " + c.getName());
-        }
+    public void run(String... args) {
+        logger.info("{} is started on port {}", springApplicationName, serverPort);
     }
 }

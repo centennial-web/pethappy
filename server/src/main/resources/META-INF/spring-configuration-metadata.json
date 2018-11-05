@@ -1,0 +1,37 @@
+{
+  "properties": [
+    {
+      "name": "security.token.secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "security.token.maxAgeSeconds",
+      "type": "java.lang.Integer",
+      "defaultValue": 86400
+    },
+    {
+      "name": "cors.allowed-origins",
+      "type": "java.util.List<java.util.String>"
+    },
+    {
+      "name": "cors.allowed-methods",
+      "type": "java.util.List<java.util.String>"
+    },
+    {
+      "name": "cors.allowed-headers",
+      "type": "java.util.List<java.util.String>"
+    },
+    {
+      "name": "cors.exposed-headers",
+      "type": "java.util.List<java.util.String>"
+    },
+    {
+      "name": "cors.allow-credentials",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "name": "cors.max-age",
+      "type": "java.lang.Long"
+    }
+  ]
+}

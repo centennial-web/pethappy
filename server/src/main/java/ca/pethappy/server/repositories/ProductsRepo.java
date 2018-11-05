@@ -1,4 +1,4 @@
-package ca.pethappy.server.repos;
+package ca.pethappy.server.repositories;
 
 import ca.pethappy.server.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

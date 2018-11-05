@@ -1,51 +1,36 @@
 package ca.pethappy.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "user_accounts")
-public class UserAccount {
+@Table(name = "users")
+public class User {
+    private Long id;
+    private String email;
+    private String password;
+    private boolean active;
+    private String firstName;
+    private String lastName;
+    private String cellPhone;
+    private String address;
+    private String unit;
+    private String postalCode;
+    private String city;
+    private String province;
+    private String buzzer;
+    private Set<Role> roles;
+
+    public User() {
+        roles = new HashSet<>();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "bigserial")
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column
-    private boolean active;
-
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "cell_phone", nullable = false)
-    private String cellPhone;
-
-    @Column(name = "address", nullable = false)
-    private String address;
-
-    @Column
-    private String unit;
-
-    @Column(name = "postal_code", nullable = false)
-    private String postalCode;
-
-    @Column(name = "city", nullable = false)
-    private String city;
-
-    @Column(nullable = false)
-    private String province;
-
-    @Column
-    private String buzzer;
-
     public Long getId() {
         return id;
     }
@@ -54,6 +39,7 @@ public class UserAccount {
         this.id = id;
     }
 
+    @Column(nullable = false, unique = true)
     public String getEmail() {
         return email;
     }
@@ -62,6 +48,7 @@ public class UserAccount {
         this.email = email;
     }
 
+    @Column(nullable = false)
     public String getPassword() {
         return password;
     }
@@ -70,6 +57,7 @@ public class UserAccount {
         this.password = password;
     }
 
+    @Column
     public boolean isActive() {
         return active;
     }
@@ -78,6 +66,7 @@ public class UserAccount {
         this.active = active;
     }
 
+    @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -86,6 +75,7 @@ public class UserAccount {
         this.firstName = firstName;
     }
 
+    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
     }
@@ -94,6 +84,7 @@ public class UserAccount {
         this.lastName = lastName;
     }
 
+    @Column(name = "cell_phone", nullable = false)
     public String getCellPhone() {
         return cellPhone;
     }
@@ -102,6 +93,7 @@ public class UserAccount {
         this.cellPhone = cellPhone;
     }
 
+    @Column(name = "address", nullable = false)
     public String getAddress() {
         return address;
     }
@@ -110,6 +102,7 @@ public class UserAccount {
         this.address = address;
     }
 
+    @Column
     public String getUnit() {
         return unit;
     }
@@ -118,6 +111,16 @@ public class UserAccount {
         this.unit = unit;
     }
 
+    @Column(name = "postal_code", nullable = false)
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    @Column(name = "city", nullable = false)
     public String getCity() {
         return city;
     }
@@ -126,6 +129,7 @@ public class UserAccount {
         this.city = city;
     }
 
+    @Column(nullable = false)
     public String getProvince() {
         return province;
     }
@@ -134,11 +138,25 @@ public class UserAccount {
         this.province = province;
     }
 
+    @Column
     public String getBuzzer() {
         return buzzer;
     }
 
     public void setBuzzer(String buzzer) {
         this.buzzer = buzzer;
+    }
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
