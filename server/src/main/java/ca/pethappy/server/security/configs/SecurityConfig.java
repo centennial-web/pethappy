@@ -42,7 +42,7 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .antMatcher("/api/token")
+                    .antMatcher("/api/login")
                     .authorizeRequests()
                     .anyRequest().authenticated()
                     .and()

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class TokenAuthenticationFilter extends AbstractPreAuthenticatedProcessingFilter {
     private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
-    private static final String HEAD_BEARER = "X-Token";
+    private static final String HEAD_BEARER = "Authorization";
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {

@@ -398,7 +398,7 @@
                 ) VALUES (
                     default, 'rodgarcialima@gmail.com',
                     '{bcrypt}$2a$10$dBtGbkjmXQqqKn.lWOQiku201NVPkiBAahI3.QU.TKuVrWRPtb8nC',
-                    true, 'Rodrigo', 'Lima', '416296366', '3773  Merivale Road', null, 'K2H 5B6',
+                    true, 'Rodrigo', 'Lima', '416296366', '3773 Merivale Road', null, 'K2H 5B6',
                     'Ottawa', 'ON', 1234
                 ) RETURNING id INTO _user_id;
 

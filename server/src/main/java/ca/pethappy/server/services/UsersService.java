@@ -15,12 +15,7 @@ public class UsersService {
     public UsersService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public User findByEmail(String email) {
-        return usersRepository.findByEmail(email);
-    }
-
+    
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public User findByEmailFetchRoles(String email) {
         return usersRepository.findByEmailFetchRoles(email);

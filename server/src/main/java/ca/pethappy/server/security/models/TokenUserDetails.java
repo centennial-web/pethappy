@@ -11,7 +11,7 @@ public class TokenUserDetails extends User {
     private String email;
 
     public TokenUserDetails(String username, String fullName, String email, String password, String token,
-                     boolean active, Collection<? extends GrantedAuthority> authorities) {
+                            boolean active, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, active, true, true, true, authorities);
         this.fullName = fullName;
         this.token = token;

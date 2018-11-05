@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class AuthorizationRESTController {
-    @GetMapping("/token")
-    public String getToken(@AuthenticationPrincipal TokenUserDetails principal) {
+    @GetMapping("/login")
+    public String login(@AuthenticationPrincipal TokenUserDetails principal) {
         return principal.getToken();
     }
 }

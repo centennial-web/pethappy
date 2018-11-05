@@ -36,13 +36,13 @@ public class TokenAuthenticationUserDetailsService
                 throw new UsernameNotFoundException("Error validating token", ex);
             }
             return new TokenUserDetails(
-                    token.getSubject(),                         // email
-                    token.getClaim("fullName").asString(),      // fullName = firstname + lastname
-                    token.getClaim("email").asString(),         // email
-                    (String) authentication.getCredentials(),   // password
-                    token.getToken(),                           // token
-                    true,                                       // active
-                    token.getClaim("roles")                     // roles
+                    token.getSubject(),                                                                             // email
+                    (token.getClaim("firstName").asString() + " " + token.getClaim("lastName").asString()).trim(),  // fullName
+                    token.getClaim("email").asString(),                                                             // email
+                    (String) authentication.getCredentials(),                                                       // password
+                    token.getToken(),                                                                               // token
+                    true,                                                                                           // active
+                    token.getClaim("roles")                                                                         // roles
                             .asList(String.class)
                             .stream()
                             .map(SimpleGrantedAuthority::new)

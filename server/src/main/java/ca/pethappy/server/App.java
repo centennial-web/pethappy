@@ -18,16 +18,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories
 public class App implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
-
-    @Bean
-    @ConfigurationProperties(prefix = "security.token")
-    public TokenProperties tokenProperties() {
-        return new TokenProperties();
-    }
-
     private final int serverPort;
     private final String springApplicationName;
-
+    
     @Autowired
     public App(@Value("${server.port}") int serverPort,
                @Value("${spring.application.name}") String springApplicationName) {
@@ -37,6 +30,12 @@ public class App implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "security.token")
+    public TokenProperties tokenProperties() {
+        return new TokenProperties();
     }
 
     @Override
