@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.codeLens": false,
+  "editor.folding": true,
+  "editor.renderIndentGuides": false
+}
