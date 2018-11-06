@@ -7,9 +7,14 @@ import { logout } from 'store/modules/auth';
 
 export const Menu = () => {
   return (
-    <div className={styles.container}>
-      <Link to="/login">Login</Link>
-    </div>
+    <ul className={styles.container}>
+      <li>
+        <Link to="/login">Login</Link>
+      </li>
+      <li>
+        <Link to="/dashboard">Dashboard</Link>
+      </li>
+    </ul>
   );
 };
 

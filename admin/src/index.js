@@ -16,6 +16,7 @@ import store from 'store/createStore';
 // Routes
 import App from 'routes/App';
 import Login from 'routes/Login';
+import Dashboard from 'routes/Dashboard';
 
 import './polyfill';
 
@@ -58,6 +59,7 @@ ReactDOM.render(
           <CssBaseline>
             <Route exact path="/" component={App} />
             <Route path="/login" component={Login} />
+            <Route path="/dashboard" component={Dashboard} />
           </CssBaseline>
         </MuiThemeProvider>
       </React.Fragment>
