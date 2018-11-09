@@ -414,4 +414,56 @@
         </sql>
     </changeSet>
 
+    <changeSet id="14" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            DO $$
+            DECLARE
+                _user_id INTEGER;
+                _role_id INTEGER;
+            BEGIN
+                -- Users
+                INSERT INTO public.users (
+                    id, email, password, active, first_name, last_name, cell_phone, address, unit,
+                    postal_code, city, province, buzzer
+                ) VALUES (
+                    default, 'guest@pethappy.ca',
+                    '{bcrypt}$2a$10$6pOPmPCslSKOaz6E3PuLj.cjGq5S1DPylSA3fBjGp5zQEZwb/.2oC',
+                    true, 'Guest', 'User', '1234567890', 'Guest Address', null, 'A1B 2C3',
+                    'Guest City', 'ON', null
+                ) RETURNING id INTO _user_id;
+
+                -- Get ROLE_GUEST id
+                SELECT id
+                INTO _role_id
+                FROM public.roles
+                WHERE name = 'ROLE_GUEST';
+
+                -- User roles
+                INSERT INTO public.user_roles (user_id, role_id) VALUES (_user_id, _role_id);
+            END $$;
+        </sql>
+    </changeSet>
+
+    <changeSet id="15" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            DO $$
+            DECLARE
+                _user_id INTEGER;
+            BEGIN
+                -- Get user id
+                SELECT id
+                INTO _user_id
+                FROM public.users
+                WHERE email = 'guest@pethappy.ca';
+
+                -- Change password
+                UPDATE users SET password='{bcrypt}$2a$10$yFPLozXRrUF2fo7ZPCiJQeVlkuQoZ9IopoDjYCEKsT9McJE2AcpMK' WHERE id = _user_id;
+            END $$;
+        </sql>
+    </changeSet>
+
+    <changeSet id="16" author="rodrigo">
+        <addUniqueConstraint tableName="users" columnNames="cell_phone" constraintName="unq_users_cell_phone" />
+    </changeSet>
+
 </databaseChangeLog>

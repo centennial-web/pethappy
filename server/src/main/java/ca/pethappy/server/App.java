@@ -20,7 +20,7 @@ public class App implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
     private final int serverPort;
     private final String springApplicationName;
-    
+
     @Autowired
     public App(@Value("${server.port}") int serverPort,
                @Value("${spring.application.name}") String springApplicationName) {
@@ -38,8 +38,12 @@ public class App implements CommandLineRunner {
         return new TokenProperties();
     }
 
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) {
         logger.info("{} is started on port {}", springApplicationName, serverPort);
+//        System.out.println(passwordEncoder.encode("mz89F#@"));
     }
 }

@@ -75,6 +75,7 @@ public class SecurityConfig {
 //                    .antMatcher("/api/user").authorizeRequests()
                     .antMatcher("/**").authorizeRequests()
                     .mvcMatchers(HttpMethod.POST, "/api/user").anonymous()
+                    .mvcMatchers(HttpMethod.POST, "/api/register").hasRole("GUEST")
                     .anyRequest().authenticated()
                     .and()
                     .cors().configurationSource(corsConfigurationSource).and()

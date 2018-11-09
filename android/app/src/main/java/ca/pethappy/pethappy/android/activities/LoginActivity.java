@@ -3,11 +3,13 @@ package ca.pethappy.pethappy.android.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.Group;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -26,8 +28,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class NewLoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
+    // Views
     private EditText emailTxt;
     private EditText passwordTxt;
     private Button loginBtn;
@@ -35,17 +38,24 @@ public class NewLoginActivity extends AppCompatActivity {
     private ProgressBar loginProgressBar;
     private Group loginGroup;
 
+    private OkHttpClient okHttpClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_login);
+        setContentView(R.layout.activity_login);
 
+        // Views
         emailTxt = findViewById(R.id.emailTxt);
         passwordTxt = findViewById(R.id.passwordTxt);
         loginBtn = findViewById(R.id.loginBtn);
         noAccYetBtn = findViewById(R.id.noAccYetBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
         loginGroup = findViewById(R.id.loginGroup);
+
+        okHttpClient = new OkHttpClient
+                .Builder()
+                .build();
 
         // If password focused and user clicks DONE
         passwordTxt.setOnEditorActionListener((textView, id, keyEvent) -> {
@@ -60,7 +70,7 @@ public class NewLoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(v -> attemptLogin());
 
         // No account yet
-        noAccYetBtn.setOnClickListener(v -> createAccount());
+        noAccYetBtn.setOnClickListener(v -> registerNewUser());
     }
 
     private void attemptLogin() {
@@ -107,19 +117,16 @@ public class NewLoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
-            new SimpleTask<Integer, String>(
-                    top -> {
+            new SimpleTask<Void, String>(
+                    none -> {
                         String credentials = Credentials.basic(email, password, Charset.forName("UTF-8"));
-                        OkHttpClient client = new OkHttpClient
-                                .Builder()
-                                .build();
                         Request request = new Request
                                 .Builder()
                                 .header("Authorization", credentials)
                                 .url(Consts.SERVER_URL + "/api/login")
                                 .get()
                                 .build();
-                        Response response = client.newCall(request).execute();
+                        Response response = okHttpClient.newCall(request).execute();
                         if (response.isSuccessful()) {
                             try (ResponseBody body = response.body()) {
                                 if (body != null) {
@@ -129,9 +136,10 @@ public class NewLoginActivity extends AppCompatActivity {
                         }
                         return null;
                     },
-                    result -> {
+                    token -> {
                         showProgress(false);
-                        if (result != null) {
+                        if (token != null) {
+                            // TODO: 07/11/18 Store token
                             finish();
                         } else {
                             passwordTxt.setError(getString(R.string.error_incorrect_password));
@@ -139,25 +147,25 @@ public class NewLoginActivity extends AppCompatActivity {
                         }
                     },
                     error -> {
-                        Toast.makeText(NewLoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
                         showProgress(false);
                     }
-            ).execute(10);
+            ).execute((Void)null);
         }
     }
 
-    private void createAccount() {
-
+    private void registerNewUser() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 6;
     }
 
     /**
@@ -165,9 +173,12 @@ public class NewLoginActivity extends AppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+        // Enable/Disable controls
+        emailTxt.setEnabled(!show);
+        passwordTxt.setEnabled(!show);
+        loginBtn.setEnabled(!show);
+        noAccYetBtn.setEnabled(!show);
+
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         loginGroup.setVisibility(show ? View.GONE : View.VISIBLE);

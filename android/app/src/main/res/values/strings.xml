@@ -20,4 +20,19 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!--RegisterActivity-->
+    <string name="register_activity_email">Email</string>
+    <string name="register_activity_first_name">First Name</string>
+    <string name="register_activity_last_name">Last Name</string>
+    <string name="register_activity_mobile_phone_number">Mobile Phone #</string>
+    <string name="register_activity_address">Address</string>
+    <string name="register_activity_unity_number">Unit#</string>
+    <string name="register_activity_postal_code">Postal Code</string>
+    <string name="register_activity_city">City</string>
+    <string name="register_activity_province_territory">Province/Terr.</string>
+    <string name="register_activity_buzzer">Buzzer</string>
+    <string name="register_activity_password">Password</string>
+    <string name="register_activity_repeat_password">Repeat Password</string>
+    <string name="activity_register_menu_save">Save</string>
 </resources>
