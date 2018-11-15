@@ -466,4 +466,12 @@
         <addUniqueConstraint tableName="users" columnNames="cell_phone" constraintName="unq_users_cell_phone" />
     </changeSet>
 
+    <!--Fix enters and spaces on products-->
+    <changeSet id="17" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            UPDATE products SET name = trim(regexp_replace(regexp_replace(name, E'[\n\r]+', ' '), '\s+', ' ', 'g'));
+            UPDATE products SET description = trim(regexp_replace(regexp_replace(description, E'[\n\r]+', ' '), '\s+', ' ', 'g'));
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
