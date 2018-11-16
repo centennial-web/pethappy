@@ -20,5 +20,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
 //            MainActivity.this.finish();
         });
+        Button navHome = findViewById(R.id.homeBtn);
+        navHome.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(loginIntent);
+//            MainActivity.this.finish();
+        });
     }
 }
