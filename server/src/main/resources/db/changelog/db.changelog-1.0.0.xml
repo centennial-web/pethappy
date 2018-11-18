@@ -474,4 +474,12 @@
         </sql>
     </changeSet>
 
+    <!--Update guest password-->
+    <changeSet id="18" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            UPDATE users SET password = '{bcrypt}$2a$10$dF6hBwc1gBsR4t5bLzCQE.m5DO5qDlJRS7Z3.uv5PzUEaHOlyWFj6'
+            WHERE email = 'guest@pethappy.ca';
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

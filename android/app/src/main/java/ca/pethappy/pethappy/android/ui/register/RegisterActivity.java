@@ -1,10 +1,9 @@
-package ca.pethappy.pethappy.android.activities;
+package ca.pethappy.pethappy.android.ui.register;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -23,11 +22,12 @@ import ca.pethappy.pethappy.android.api.ValidationErrors;
 import ca.pethappy.pethappy.android.api.ValidationException;
 import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
-import ca.pethappy.pethappy.android.tasks.base.SimpleTask;
+import ca.pethappy.pethappy.android.utils.tasks.SimpleTask;
+import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import retrofit2.Response;
 
 // https://guides.codepath.com/android/using-the-app-toolbar
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     // Components
     private TextInputLayout emailLay;

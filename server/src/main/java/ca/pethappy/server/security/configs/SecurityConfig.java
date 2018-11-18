@@ -83,7 +83,8 @@ public class SecurityConfig {
                     .authenticationProvider(preAuthProvider())
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and().csrf().disable();
+                    .and()
+                    .csrf();
         }
 
         @Bean

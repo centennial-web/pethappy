@@ -1,4 +1,4 @@
-package ca.pethappy.pethappy.android.activities;
+package ca.pethappy.pethappy.android.ui.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.Group;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -21,14 +20,16 @@ import java.nio.charset.Charset;
 
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
-import ca.pethappy.pethappy.android.tasks.base.SimpleTask;
+import ca.pethappy.pethappy.android.utils.tasks.SimpleTask;
+import ca.pethappy.pethappy.android.ui.base.BaseActivity;
+import ca.pethappy.pethappy.android.ui.register.RegisterActivity;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     // Views
     private EditText emailTxt;
@@ -119,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
             new SimpleTask<Void, String>(
                     none -> {
+                        // Create basic auth credentials = base64(user : password)
                         String credentials = Credentials.basic(email, password, Charset.forName("UTF-8"));
                         Request request = new Request
                                 .Builder()
@@ -139,9 +141,11 @@ public class LoginActivity extends AppCompatActivity {
                     token -> {
                         showProgress(false);
                         if (token != null) {
-                            // TODO: 07/11/18 Store token
+                            app.setLocalUserToken(token);
+                            setResult(RESULT_OK);
                             finish();
                         } else {
+                            setResult(RESULT_CANCELED);
                             passwordTxt.setError(getString(R.string.error_incorrect_password));
                             passwordTxt.requestFocus();
                         }
@@ -150,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
                         showProgress(false);
                     }
-            ).execute((Void)null);
+            ).execute((Void) null);
         }
     }
 

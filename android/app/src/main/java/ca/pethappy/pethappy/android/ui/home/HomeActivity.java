@@ -1,20 +1,19 @@
-package ca.pethappy.pethappy.android.activities;
+package ca.pethappy.pethappy.android.ui.home;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import ca.pethappy.pethappy.android.CartFragment;
-import ca.pethappy.pethappy.android.HomeFragment;
-import ca.pethappy.pethappy.android.PreferenceFragment;
+import ca.pethappy.pethappy.android.ui.cart.CartFragment;
+import ca.pethappy.pethappy.android.ui.preferences.PreferenceFragment;
 import ca.pethappy.pethappy.android.R;
+import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     private BottomNavigationView mainNav;
     private FrameLayout mainFrame;

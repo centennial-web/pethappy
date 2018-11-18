@@ -1,13 +1,16 @@
-package ca.pethappy.pethappy.android.activities;
+package ca.pethappy.pethappy.android.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import ca.pethappy.pethappy.android.R;
+import ca.pethappy.pethappy.android.ui.base.BaseActivity;
+import ca.pethappy.pethappy.android.ui.home.HomeActivity;
+import ca.pethappy.pethappy.android.ui.login.LoginActivity;
+import ca.pethappy.pethappy.android.ui.profile.ProfileActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +29,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
 //            MainActivity.this.finish();
         });
+
+        // Logout
+        Button logoutBtn = findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(v -> app.logoutUser());
+
+        // Profile
+        Button profileBtn = findViewById(R.id.profileBtn);
+        profileBtn.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
     }
 }

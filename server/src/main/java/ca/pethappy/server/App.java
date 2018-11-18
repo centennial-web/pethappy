@@ -44,6 +44,6 @@ public class App implements CommandLineRunner {
     @Override
     public void run(String... args) {
         logger.info("{} is started on port {}", springApplicationName, serverPort);
-//        System.out.println(passwordEncoder.encode("mz89F#@"));
+//        System.out.println(passwordEncoder.encode(""));
     }
 }
