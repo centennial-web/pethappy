@@ -6,7 +6,7 @@
         android:title="@string/title_products" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_subscriptions"
         android:icon="@drawable/ic_update_black_24dp"
         android:title="@string/title_subscriptions" />
 

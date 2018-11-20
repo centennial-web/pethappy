@@ -41,7 +41,7 @@ public class JpaDetailsService implements UserDetailsService {
     }
 
     private TokenUserDetails getUserDetails(User user) {
-        TokenUserDetails userDetails = new TokenUserDetails(
+        return new TokenUserDetails(
                 user.getEmail(),
                 (user.getFirstName() + " " + user.getLastName()).trim(),
                 user.getEmail(),
@@ -50,7 +50,6 @@ public class JpaDetailsService implements UserDetailsService {
                 user.isActive(),
                 getUserGrantedAuthorities(user.getRoles())
         );
-        return userDetails;
     }
 
     private List<GrantedAuthority> getUserGrantedAuthorities(Set<Role> userRoles) {
