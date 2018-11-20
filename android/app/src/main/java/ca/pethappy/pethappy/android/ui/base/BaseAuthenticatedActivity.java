@@ -17,7 +17,7 @@ public abstract class BaseAuthenticatedActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         // The user is not logged if there is no token or if the token is expired
-        if (!app.isUserLogged()) {
+        if (!getApp().isUserLogged()) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivityForResult(loginIntent, LOGIN_REQUEST);
         }

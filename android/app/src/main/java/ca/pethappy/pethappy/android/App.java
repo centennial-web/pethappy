@@ -8,12 +8,14 @@ import com.auth0.jwt.JWT;
 import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Date;
 
 import ca.pethappy.pethappy.android.api.NoSecEndpoints;
 import ca.pethappy.pethappy.android.api.SecEndpoints;
 import ca.pethappy.pethappy.android.consts.Consts;
+import ca.pethappy.pethappy.android.utils.moshiadapters.BigDecimalAdapter;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -37,6 +39,7 @@ public class App extends Application {
 
         // Json
         Moshi moshi = new Moshi.Builder()
+                .add(BigDecimal.class, new BigDecimalAdapter().nullSafe())
                 .build();
 
         // Sec (Any real user must be logged)

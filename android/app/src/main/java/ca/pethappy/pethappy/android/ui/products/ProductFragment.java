@@ -3,13 +3,22 @@ package ca.pethappy.pethappy.android.ui.products;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import ca.pethappy.pethappy.android.R;
+import ca.pethappy.pethappy.android.api.page.Page;
+import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
+import ca.pethappy.pethappy.android.utils.tasks.SimpleTask;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +28,9 @@ import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListe
  * Use the {@link ProductFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductFragment extends Fragment {
+public class ProductFragment extends BaseFragment {
+    private static final String TAG = "ProductFragment";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,6 +41,9 @@ public class ProductFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private RecyclerView recyclerView;
+    private ProductAdapter productAdapter;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -63,10 +77,40 @@ public class ProductFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product, container, false);
+        // Get view root
+        final View rootView = inflater.inflate(R.layout.fragment_product, container, false);
+
+        // Adapter
+        productAdapter = new ProductAdapter((product, view) -> {
+            Toast.makeText(getContext(), "Product: " + product.name, Toast.LENGTH_LONG).show();
+            // TODO: 20/11/18 Open product details
+        });
+
+        // Recycler view
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(productAdapter);
+
+        // Query products
+        new SimpleTask<Void, Page<Product>>(
+                none -> {
+                    Response<Page<Product>> response = getApp().noSecEndpoints.productsFindAll().execute();
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    }
+                    return new Page<>();
+                },
+                payload -> {
+                    productAdapter.updateData(payload.content);
+                },
+                error -> {
+                    Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+        ).execute((Void) null);
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

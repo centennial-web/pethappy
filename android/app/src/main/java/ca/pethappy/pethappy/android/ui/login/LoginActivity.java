@@ -141,7 +141,7 @@ public class LoginActivity extends BaseActivity {
                     token -> {
                         showProgress(false);
                         if (token != null) {
-                            app.setLocalUserToken(token);
+                            getApp().setLocalUserToken(token);
                             setResult(RESULT_OK);
                             finish();
                         } else {

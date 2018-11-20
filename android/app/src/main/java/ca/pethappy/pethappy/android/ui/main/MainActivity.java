@@ -53,15 +53,20 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         cartFragment = new CartFragment();
         settingsFragment = new SettingsFragment();
 
+        // Navigation
+        navigation = findViewById(R.id.bottom_navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         // Set products as default fragment
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, productFragment)
                 .commit();
-
-        // Navigation
-        navigation = findViewById(R.id.bottom_navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -74,7 +79,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                app.logoutUser();
+                getApp().logoutUser();
                 Toast.makeText(this, "Log out successfully", Toast.LENGTH_SHORT).show();
                 return true;
             default:
@@ -92,7 +97,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         .commit();
                 return true;
             case R.id.navigation_subscriptions:
-                if (!app.isUserLogged()) {
+                if (!getApp().isUserLogged()) {
                     startActivityForResult(new Intent(this, LoginActivity.class), OPEN_SUBSCRIPTIONS_REQUEST);
                     return false;
                 } else {
@@ -109,7 +114,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                         .commit();
                 return true;
             case R.id.navigation_settings:
-                if (!app.isUserLogged()) {
+                if (!getApp().isUserLogged()) {
                     startActivityForResult(new Intent(this, LoginActivity.class), OPEN_SETTINGS_REQUEST);
                     return false;
                 } else {
