@@ -3,7 +3,6 @@ package ca.pethappy.pethappy.android.ui.products;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,20 +58,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         // Fill the views
         viewHolder.nameTxt.setText(product.name);
+        viewHolder.manufacturerTxt.setText("by " + product.manufacturer.name);
         viewHolder.categoryTxt.setText(product.category.name);
-        viewHolder.manufacturerTxt.setText(product.manufacturer.name);
-        viewHolder.ingredientTxt.setText(product.ingredient.name);
-        viewHolder.weightKgTxt.setText(Formatter.getInstance().formatNumber2(product.weightKg));
-        viewHolder.priceTxt.setText(Formatter.getInstance().formatNumber2(product.price));
+        viewHolder.ingredientTxt.setText("Main ingredient is " + product.ingredient.name);
+        viewHolder.weightKgTxt.setText(Formatter.getInstance().formatNumber2(product.weightKg) + " Kg");
+        viewHolder.priceTxt.setText("CDN$ " + Formatter.getInstance().formatNumber2(product.price));
 
         // Photo
-        if (TextUtils.isEmpty(product.imageUrl)) {
-            // TODO: 20/11/18 Picture placeholder, error and fallback
-            Glide.with(viewHolder.itemView.getContext())
-                    .load(Consts.AWS_S3_URL + "/" + product.imageUrl)
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
-                    .into(viewHolder.pictureImv);
-        }
+        // TODO: 20/11/18 Picture placeholder, error and fallback
+        Glide.with(viewHolder.itemView.getContext())
+                .load(Consts.AWS_S3_URL + "/" + product.imageUrl)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .into(viewHolder.pictureImv);
 
         // Product click
         viewHolder.itemView.setOnClickListener(v -> {
@@ -89,8 +86,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
-        TextView categoryTxt;
         TextView manufacturerTxt;
+        TextView categoryTxt;
         TextView ingredientTxt;
         TextView weightKgTxt;
         TextView priceTxt;
@@ -100,8 +97,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             super(itemView);
 
             nameTxt = itemView.findViewById(R.id.nameTxt);
-            categoryTxt = itemView.findViewById(R.id.categoryTxt);
             manufacturerTxt = itemView.findViewById(R.id.manufacturerTxt);
+            categoryTxt = itemView.findViewById(R.id.categoryTxt);
             ingredientTxt = itemView.findViewById(R.id.ingredientTxt);
             weightKgTxt = itemView.findViewById(R.id.weightKgTxt);
             priceTxt = itemView.findViewById(R.id.priceTxt);
