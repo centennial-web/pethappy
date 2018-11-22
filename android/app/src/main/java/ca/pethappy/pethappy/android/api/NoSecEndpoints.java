@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface NoSecEndpoints {
 
@@ -17,4 +18,6 @@ public interface NoSecEndpoints {
     @GET("/api/products/findAll")
     Call<Page<Product>> productsFindAll();
 
+    @GET("/api/products/findById/{id}")
+    Call<Product> productsFindById(@Path("id") Long id);
 }

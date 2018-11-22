@@ -10,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 public class ProductsController {
@@ -25,5 +28,17 @@ public class ProductsController {
     @GetMapping("/api/products/findAll")
     public ResponseEntity<Page<Product>> findAll(@Nullable final Pageable pageable) {
         return new ResponseEntity<>(productsService.findAll(pageable), HttpStatus.OK);
+    }
+
+    @SuppressWarnings("OptionalIsPresent")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/api/products/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Optional<Product> product = productsService.findById(id);
+        if (product.isPresent()) {
+            return new ResponseEntity<>(product.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 }

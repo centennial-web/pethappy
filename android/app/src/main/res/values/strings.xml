@@ -52,4 +52,5 @@
     <string name="action_logout">Logout</string>
     <string name="detailstextview">detailsTextView</string>
     <string name="tips_badge_removed" translatable="false">Badge is removed</string>
+    <string name="title_activity_product_details2">ProductDetails2Activity</string>
 </resources>

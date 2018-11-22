@@ -1,6 +1,7 @@
 package ca.pethappy.pethappy.android.ui.products;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -84,8 +85,9 @@ public class ProductFragment extends BaseFragment {
 
         // Adapter
         productAdapter = new ProductAdapter((product, view) -> {
-            Toast.makeText(getContext(), "Product: " + product.name, Toast.LENGTH_LONG).show();
-            // TODO: 20/11/18 Open product details
+            Intent productDetailsIntent = new Intent(getContext(), ProductDetailsActivity.class);
+            productDetailsIntent.putExtra("productId", product.id);
+            startActivity(productDetailsIntent);
         });
 
         // Recycler view

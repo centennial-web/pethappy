@@ -2,6 +2,7 @@ package ca.pethappy.pethappy.android.ui.products;
 
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
+import ca.pethappy.pethappy.android.utils.glide.GlideApp;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private final List<Product> products;
@@ -66,13 +68,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         // Photo
         // TODO: 20/11/18 Picture placeholder, error and fallback
-        Glide.with(viewHolder.itemView.getContext())
+        GlideApp.with(viewHolder.itemView.getContext())
                 .load(Consts.AWS_S3_URL + "/" + product.imageUrl)
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions
+                        .diskCacheStrategyOf(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.placeholder))
                 .into(viewHolder.pictureImv);
 
         // Product click
-        viewHolder.itemView.setOnClickListener(v -> {
+        viewHolder.productCardview.setOnClickListener(v -> {
             if (productAdapterEventsListener != null) {
                 productAdapterEventsListener.onItemClick(product, v);
             }
@@ -92,6 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         TextView weightKgTxt;
         TextView priceTxt;
         ImageView pictureImv;
+        CardView productCardview;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +108,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             weightKgTxt = itemView.findViewById(R.id.weightKgTxt);
             priceTxt = itemView.findViewById(R.id.priceTxt);
             pictureImv = itemView.findViewById(R.id.pictureImv);
+            productCardview = itemView.findViewById(R.id.productCardview);
         }
     }
 
