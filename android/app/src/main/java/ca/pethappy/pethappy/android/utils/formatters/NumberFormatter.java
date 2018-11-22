@@ -1,4 +1,4 @@
-package ca.pethappy.pethappy.android.utils;
+package ca.pethappy.pethappy.android.utils.formatters;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -7,13 +7,13 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Formatter {
+public class NumberFormatter {
     private static final DecimalFormat df2 = (DecimalFormat) NumberFormat.getNumberInstance(Locale.CANADA);
 
-    private static Formatter ourInstance = new Formatter();
+    private static NumberFormatter ourInstance = new NumberFormatter();
 
     static {
-        // Formatter
+        // NumberFormatter
         df2.setMinimumFractionDigits(2);
         df2.setMaximumFractionDigits(2);
         df2.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -28,11 +28,11 @@ public class Formatter {
         df2.setDecimalFormatSymbols(symbols2);
     }
 
-    public static Formatter getInstance() {
+    public static NumberFormatter getInstance() {
         return ourInstance;
     }
 
-    private Formatter() {
+    private NumberFormatter() {
     }
 
     public String formatNumber2(BigDecimal n) {

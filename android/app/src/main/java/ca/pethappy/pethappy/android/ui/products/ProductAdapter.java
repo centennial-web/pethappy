@@ -19,7 +19,7 @@ import java.util.List;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.backend.Product;
-import ca.pethappy.pethappy.android.utils.Formatter;
+import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private final List<Product> products;
@@ -61,8 +61,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         viewHolder.manufacturerTxt.setText("by " + product.manufacturer.name);
         viewHolder.categoryTxt.setText(product.category.name);
         viewHolder.ingredientTxt.setText("Main ingredient is " + product.ingredient.name);
-        viewHolder.weightKgTxt.setText(Formatter.getInstance().formatNumber2(product.weightKg) + " Kg");
-        viewHolder.priceTxt.setText("CDN$ " + Formatter.getInstance().formatNumber2(product.price));
+        viewHolder.weightKgTxt.setText(NumberFormatter.getInstance().formatNumber2(product.weightKg) + " Kg");
+        viewHolder.priceTxt.setText("CDN$ " + NumberFormatter.getInstance().formatNumber2(product.price));
 
         // Photo
         // TODO: 20/11/18 Picture placeholder, error and fallback

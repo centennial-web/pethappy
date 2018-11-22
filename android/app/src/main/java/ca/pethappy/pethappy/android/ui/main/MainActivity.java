@@ -15,14 +15,19 @@ import android.widget.Toast;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
+import ca.pethappy.pethappy.android.ui.cart.CartBadgeListener;
 import ca.pethappy.pethappy.android.ui.cart.CartFragment;
 import ca.pethappy.pethappy.android.ui.login.LoginActivity;
 import ca.pethappy.pethappy.android.ui.products.ProductFragment;
 import ca.pethappy.pethappy.android.ui.settings.SettingsFragment;
 import ca.pethappy.pethappy.android.ui.subscriptions.SubscriptionsFragment;
+import ca.pethappy.pethappy.android.utils.badge.Badge;
+import ca.pethappy.pethappy.android.utils.badge.QBadgeView;
+import ca.pethappy.pethappy.android.utils.navigator.BottomNavigationViewEx;
 
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,
-        BottomNavigationView.OnNavigationItemSelectedListener {
+        BottomNavigationView.OnNavigationItemSelectedListener,
+        CartBadgeListener {
     private static final int OPEN_SUBSCRIPTIONS_REQUEST = 1;
     private static final int OPEN_SETTINGS_REQUEST = 2;
 
@@ -34,7 +39,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     private SettingsFragment settingsFragment;
 
     // Bottom navigation
-    private BottomNavigationView navigation;
+    private BottomNavigationViewEx navigation;
+    private Badge badge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         // Navigation
         navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(this);
+        navigation.enableAnimation(true);
+
+        // Badge
+        badge = new QBadgeView(this)
+                .setBadgeNumber(0)
+                .setGravityOffset(20, 2, true)
+                .setShowShadow(true)
+                .bindTarget(navigation.getBottomNavigationItemView(2));
     }
 
     @Override
@@ -158,5 +172,21 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                 Toast.makeText(this, "You must be logged to access the settings", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onUpdateBadge(int number) {
+        // Hide
+        if (number <= 0) {
+            badge.hide(true);
+            return;
+        }
+        // Update number
+        badge.setBadgeNumber(number);
+    }
+
+    @Override
+    public int getNumber() {
+        return badge.getBadgeNumber();
     }
 }

@@ -22,7 +22,7 @@ import ca.pethappy.pethappy.android.api.ValidationErrors;
 import ca.pethappy.pethappy.android.api.ValidationException;
 import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
-import ca.pethappy.pethappy.android.utils.tasks.SimpleTask;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import retrofit2.Response;
 

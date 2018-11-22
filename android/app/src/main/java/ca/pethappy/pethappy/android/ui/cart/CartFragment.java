@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
@@ -31,6 +32,7 @@ public class CartFragment extends BaseFragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private CartBadgeListener cartBadgeListener;
 
     public CartFragment() {
         // Required empty public constructor
@@ -67,7 +69,21 @@ public class CartFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_cart, container, false);
+
+        Button plusBtn = rootView.findViewById(R.id.plusBtn);
+        Button minusBtn = rootView.findViewById(R.id.minusBtn);
+
+        plusBtn.setOnClickListener(v -> {
+            int number = cartBadgeListener.getNumber();
+            cartBadgeListener.onUpdateBadge(++number);
+        });
+        minusBtn.setOnClickListener(v -> {
+            int number = cartBadgeListener.getNumber();
+            cartBadgeListener.onUpdateBadge(--number);
+        });
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -75,17 +91,22 @@ public class CartFragment extends BaseFragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+        }
+
+        if (context instanceof CartBadgeListener) {
+            cartBadgeListener = (CartBadgeListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement CartBadgeListener");
         }
     }
 

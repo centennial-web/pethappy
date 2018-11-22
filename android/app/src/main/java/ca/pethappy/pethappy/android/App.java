@@ -15,7 +15,7 @@ import java.util.Date;
 import ca.pethappy.pethappy.android.api.NoSecEndpoints;
 import ca.pethappy.pethappy.android.api.SecEndpoints;
 import ca.pethappy.pethappy.android.consts.Consts;
-import ca.pethappy.pethappy.android.utils.moshiadapters.BigDecimalAdapter;
+import ca.pethappy.pethappy.android.utils.moshi.BigDecimalAdapter;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

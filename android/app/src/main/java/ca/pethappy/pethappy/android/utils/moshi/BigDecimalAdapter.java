@@ -1,4 +1,4 @@
-package ca.pethappy.pethappy.android.utils.moshiadapters;
+package ca.pethappy.pethappy.android.utils.moshi;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;

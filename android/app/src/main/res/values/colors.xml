@@ -8,4 +8,7 @@
 
     <color name="accentColor">#303F9F</color>
     <color name="backgroundColor">#ffffff</color>
+
+    <color name="greenColor">#ff669900</color>
+    <color name="grayColor">#ECEFF1</color>
 </resources>

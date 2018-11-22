@@ -17,7 +17,7 @@ import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
-import ca.pethappy.pethappy.android.utils.tasks.SimpleTask;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 import retrofit2.Response;
 
 /**

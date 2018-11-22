@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
-import ca.pethappy.pethappy.android.utils.tasks.SimpleTask;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import ca.pethappy.pethappy.android.ui.register.RegisterActivity;
 import okhttp3.Credentials;
