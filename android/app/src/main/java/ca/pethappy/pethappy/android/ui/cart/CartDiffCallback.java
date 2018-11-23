@@ -33,7 +33,7 @@ public class CartDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).id.equals(newList.get(newItemPosition).id);
+        return oldList.get(oldItemPosition).quantity == newList.get(newItemPosition).quantity;
     }
 
     @Nullable

@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
@@ -23,7 +21,6 @@ import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
-import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final App app;
@@ -31,8 +28,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final CartAdapterEventsListener cartAdapterEventsListener;
 
     public CartAdapter(App app, CartAdapterEventsListener cartAdapterEventsListener) {
+        this(app, null, cartAdapterEventsListener);
+    }
+
+    public CartAdapter(App app, final List<CartItem> cartItems,
+                       CartAdapterEventsListener cartAdapterEventsListener) {
         this.app = app;
-        this.cartItems = new ArrayList<>();
+        this.cartItems = (cartItems == null) ? new ArrayList<>() : cartItems;
         this.cartAdapterEventsListener = cartAdapterEventsListener;
     }
 
@@ -80,75 +82,36 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         // Product click
         viewHolder.productCardview.setOnClickListener(v -> {
             if (cartAdapterEventsListener != null) {
-                cartAdapterEventsListener.onItemClick(cartItem, v);
+                cartAdapterEventsListener.onItemClick(cartItem, viewHolder);
             }
         });
 
         // Plus click
         viewHolder.plusBtn.setOnClickListener(v -> {
-            // Add item
-            new SimpleTask<Void, Boolean>(
-                    none -> app.cartServices.addItemToCart(cartItem.product.id),
-                    ok -> {
-                        if (ok) {
-                            viewHolder.quantityTxt.setText("Quantity: " + (++cartItem.quantity));
-                        }
-                    },
-                    error -> {
-                        Toast.makeText(app.getApplicationContext(), "Something went wrong. " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        System.out.println(error.getMessage());
-                    }
-            ).execute((Void) null);
-
             if (cartAdapterEventsListener != null) {
-                cartAdapterEventsListener.onPlusClick(cartItem, v);
+                cartAdapterEventsListener.onPlusClick(cartItem, viewHolder);
             }
         });
 
         // Minus click
         viewHolder.minusBtn.setEnabled(cartItem.quantity > 0);
         viewHolder.minusBtn.setOnClickListener(v -> {
-            // Add item
-            new SimpleTask<Void, Boolean>(
-                    none -> app.cartServices.removeItemFromCart(cartItem.product.id),
-                    ok -> {
-                        if (ok) {
-                            int newQuantity = --cartItem.quantity;
-                            List<CartItem> newCartItems = new ArrayList<>();
-
-                            // Remove item
-                            if (newQuantity <= 0) {
-                                for (CartItem item : cartItems) {
-                                    if (!item.product.id.equals(cartItem.product.id)) {
-                                        newCartItems.add(item);
-                                    }
-                                }
-                                updateData(newCartItems);
-                            }
-                            // Just update the quantity
-                            else {
-                                viewHolder.quantityTxt.setText("Quantity: " + newQuantity);
-                            }
-                        }
-                    },
-                    error -> {
-                        Toast.makeText(app.getApplicationContext(), "Something went wrong. " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        System.out.println(error.getMessage());
-                    }
-            ).execute((Void) null);
-
             if (cartAdapterEventsListener != null) {
-                cartAdapterEventsListener.onMinusClick(cartItem, v);
+                cartAdapterEventsListener.onMinusClick(cartItem, viewHolder);
             }
         });
     }
+
+//    public List<CartItem> getCartItems() {
+//        return cartItems;
+//    }
 
     @Override
     public int getItemCount() {
         return cartItems.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
         TextView manufacturerTxt;
         TextView categoryTxt;
@@ -179,10 +142,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     public interface CartAdapterEventsListener {
-        void onItemClick(CartItem cartItem, View view);
+        void onItemClick(CartItem cartItem, ViewHolder viewHolder);
 
-        void onPlusClick(CartItem cartItem, View view);
+        void onPlusClick(CartItem cartItem, ViewHolder viewHolder);
 
-        void onMinusClick(CartItem cartItem, View view);
+        void onMinusClick(CartItem cartItem, ViewHolder viewHolder);
     }
 }

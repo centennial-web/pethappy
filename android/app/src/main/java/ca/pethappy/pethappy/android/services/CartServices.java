@@ -1,8 +1,10 @@
 package ca.pethappy.pethappy.android.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
+import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.forms.AddCartItem;
 import retrofit2.Response;
 
@@ -11,6 +13,16 @@ public class CartServices {
 
     public CartServices(App app) {
         this.app = app;
+    }
+
+    public List<CartItem> listItems() throws IOException {
+        Response<List<CartItem>> response = app.noSecEndpoints
+                .cartItems(app.getDeviceId(), app.getUserInfo().id).execute();
+        List<CartItem> body;
+        if (response.isSuccessful() && (body = response.body()) != null) {
+            return body;
+        }
+        throw new IOException("Couldn't list cart items");
     }
 
     public boolean addItemToCart(long productId) throws IOException {
