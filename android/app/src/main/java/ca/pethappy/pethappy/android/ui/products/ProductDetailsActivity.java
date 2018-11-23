@@ -1,6 +1,5 @@
 package ca.pethappy.pethappy.android.ui.products;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -46,11 +45,11 @@ public class ProductDetailsActivity extends BaseActivity {
         fab.setOnClickListener(view -> {
             new SimpleTask<Void, Boolean>(
                     none -> {
-                        boolean result = getApp().cartServices.addItemToCart(productId);
-                        return result;
+                        getApp().cartServices.addItemToCart(productId);
+                        return true;
                     },
-                    added -> {
-                        if (added) {
+                    ok -> {
+                        if (ok) {
                             Snackbar.make(view, "Product added to the cart", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }

@@ -47,8 +47,11 @@ public class Cart {
         this.user = user;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+    @OneToMany(
+            mappedBy = "cart",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     public List<CartItem> getItems() {
         return items;
     }

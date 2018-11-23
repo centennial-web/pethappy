@@ -1,6 +1,7 @@
 package ca.pethappy.server.api;
 
 import ca.pethappy.server.forms.AddCartItem;
+import ca.pethappy.server.models.Cart;
 import ca.pethappy.server.services.CartsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,11 @@ public class CartsController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/api/carts/addItem", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> cartAddItem(@RequestBody AddCartItem cartItem) {
-        return new ResponseEntity<>(true, HttpStatus.CREATED);
+        try {
+            cartsService.addItem(cartItem.getDeviceId(), cartItem.getUserId(), cartItem.getProductId());
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

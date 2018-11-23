@@ -8,6 +8,7 @@ public class CartItem {
     private Long id;
     private Product product;
     private int quantity;
+    private Cart cart;
 
     public CartItem() {
     }
@@ -40,5 +41,15 @@ public class CartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

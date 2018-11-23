@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import ca.pethappy.pethappy.android.api.NoSecEndpoints;
 import ca.pethappy.pethappy.android.api.SecEndpoints;
@@ -65,6 +66,9 @@ public class App extends Application {
 
         // Sec (Any real user must be logged)
         OkHttpClient secOkHttp = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.MINUTES)
+                .readTimeout(10, TimeUnit.MINUTES)
                 .addInterceptor(chain -> {
                     Request newRequest = chain.request().newBuilder()
                             .addHeader("Authorization", getLocalUserToken())
@@ -81,6 +85,9 @@ public class App extends Application {
 
         // No Sec (It means that at least GUEST access can access these endpoints)
         OkHttpClient noSecOkHttp = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.MINUTES)
+                .readTimeout(10, TimeUnit.MINUTES)
                 .addInterceptor(chain -> {
                     String token;
 

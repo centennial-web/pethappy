@@ -1,7 +1,5 @@
 package ca.pethappy.pethappy.android.api;
 
-import java.util.UUID;
-
 import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.backend.Product;

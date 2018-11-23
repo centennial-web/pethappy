@@ -1,7 +1,7 @@
 package ca.pethappy.server.services;
 
 import ca.pethappy.server.models.Product;
-import ca.pethappy.server.repositories.ProductsRepo;
+import ca.pethappy.server.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,20 +12,20 @@ import java.util.Optional;
 
 @Service
 public class ProductsService {
-    private final ProductsRepo productsRepo;
+    private final ProductsRepository productsRepository;
 
     @Autowired
-    public ProductsService(ProductsRepo productsRepo) {
-        this.productsRepo = productsRepo;
+    public ProductsService(ProductsRepository productsRepository) {
+        this.productsRepository = productsRepository;
     }
 
     @Transactional(readOnly = true)
     public Page<Product> findAll(Pageable pageable) {
-        return productsRepo.findAll(pageable);
+        return productsRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
     public Optional<Product> findById(Long id) {
-        return productsRepo.findById(id);
+        return productsRepository.findById(id);
     }
 }
