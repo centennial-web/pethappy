@@ -1,17 +1,30 @@
 package ca.pethappy.pethappy.android.ui.cart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.pethappy.pethappy.android.R;
+import ca.pethappy.pethappy.android.models.backend.CartItem;
+import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
+import ca.pethappy.pethappy.android.ui.products.ProductAdapter;
+import ca.pethappy.pethappy.android.ui.products.ProductDetailsActivity;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +47,9 @@ public class CartFragment extends BaseFragment {
     private OnFragmentInteractionListener mListener;
     private CartBadgeListener cartBadgeListener;
     private CartListener cartListener;
+
+    private RecyclerView recyclerView;
+    private CartAdapter cartAdapter;
 
     public CartFragment() {
         // Required empty public constructor
@@ -69,20 +85,54 @@ public class CartFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_cart, container, false);
+        // Get view root
+        final View rootView = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        Button plusBtn = rootView.findViewById(R.id.plusBtn);
-        Button minusBtn = rootView.findViewById(R.id.minusBtn);
+        // Adapter
+        cartAdapter = new CartAdapter(getApp(), new CartAdapter.CartAdapterEventsListener() {
+            @Override
+            public void onItemClick(CartItem cartItem, View view) {
+                Intent productDetailsIntent = new Intent(getContext(), ProductDetailsActivity.class);
+                productDetailsIntent.putExtra(ProductDetailsActivity.EXTRA_PRODUCT_ID, cartItem.product.id);
+                startActivity(productDetailsIntent);
+            }
 
-        plusBtn.setOnClickListener(v -> {
-            int number = cartBadgeListener.getNumber();
-            cartBadgeListener.onUpdateBadge(++number);
+            @Override
+            public void onPlusClick(CartItem cartItem, View view) {
+            }
+
+            @Override
+            public void onMinusClick(CartItem cartItem, View view) {
+                if (cartItem.quantity <= 0) {
+                    return;
+                }
+
+                // Remove item
+            }
         });
-        minusBtn.setOnClickListener(v -> {
-            int number = cartBadgeListener.getNumber();
-            cartBadgeListener.onUpdateBadge(--number);
-        });
+
+        // Recycler view
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(cartAdapter);
+
+        // Query products
+        new SimpleTask<Void, List<CartItem>>(
+                none -> {
+                    // Get query params
+                    String deviceId = getApp().getDeviceId();
+                    Long userId = getApp().getUserInfo().id;
+
+                    // Execute query
+                    Response<List<CartItem>> response = getApp().noSecEndpoints.cartItems(deviceId, userId).execute();
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    }
+                    return new ArrayList<>();
+                },
+                payload -> cartAdapter.updateData(payload),
+                error -> Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+        ).execute((Void) null);
 
         return rootView;
     }
@@ -108,12 +158,6 @@ public class CartFragment extends BaseFragment {
             cartBadgeListener = (CartBadgeListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement CartBadgeListener");
-        }
-
-        if (context instanceof CartListener) {
-            cartListener = (CartListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement CartListener");
         }
     }
 

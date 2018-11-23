@@ -1,5 +1,7 @@
 package ca.pethappy.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -43,6 +45,7 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     public Cart getCart() {

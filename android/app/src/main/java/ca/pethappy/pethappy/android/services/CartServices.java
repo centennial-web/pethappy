@@ -28,8 +28,17 @@ public class CartServices {
         throw new IOException("Couldn't add item to the cart");
     }
 
-    public void removeItemFromCart(long productId) throws IOException {
+    public boolean removeItemFromCart(long productId) throws IOException {
+        Response<Boolean> response = app.noSecEndpoints.cartDeleteItem(
+                app.getDeviceId(),
+                app.getUserInfo().id,
+                productId).execute();
 
+        Boolean ok;
+        if (response.isSuccessful() && (ok = response.body()) != null) {
+            return ok;
+        }
+        throw new IOException("Couldn't remove item to the cart");
     }
 
     public int getItemCount() throws IOException {

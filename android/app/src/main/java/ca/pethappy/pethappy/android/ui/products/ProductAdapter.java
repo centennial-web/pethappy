@@ -24,12 +24,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private final List<Product> products;
     private final ProductAdapterEventsListener productAdapterEventsListener;
 
-    ProductAdapter(ProductAdapterEventsListener productAdapterEventsListener) {
+    public ProductAdapter(ProductAdapterEventsListener productAdapterEventsListener) {
         this.products = new ArrayList<>();
         this.productAdapterEventsListener = productAdapterEventsListener;
     }
 
-    void updateData(List<Product> products) {
+    public void updateData(List<Product> products) {
         final ProductDiffCallback diffCallback = new ProductDiffCallback(this.products, products);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.products.clear();
@@ -106,7 +106,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }
     }
 
-    interface ProductAdapterEventsListener {
+    public interface ProductAdapterEventsListener {
         void onItemClick(Product product, View view);
     }
 }

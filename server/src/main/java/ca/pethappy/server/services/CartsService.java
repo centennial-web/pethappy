@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,6 +39,17 @@ public class CartsService {
     public int getItemCount(UUID deviceId, Long userId) {
         Cart cart = cartsRepository.findByDeviceIdAndUserId(deviceId, userId);
         return cart.getItems().size();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CartItem> cartItems(String deviceId, Long userId) {
+        // Get cart
+        Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);
+        if (cart == null) {
+            throw new IllegalArgumentException("Cart not found");
+        }
+
+        return cart.getItems();
     }
 
     @SuppressWarnings("Duplicates")
@@ -92,4 +105,22 @@ public class CartsService {
         }
     }
 
+    public void deleteItem(String deviceId, Long userId, Long productId) throws IllegalArgumentException {
+        Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);
+
+        // Create if not exists
+        if (cart == null) {
+            throw new IllegalArgumentException("Cart not found");
+        }
+
+        // Update product quantity
+        for (int i = 0; i < cart.getItems().size(); i++) {
+            CartItem item = cart.getItems().get(i);
+            if (item.getProduct().getId().equals(productId)) {
+                item.setQuantity(item.getQuantity() - 1);
+                cartItemsRepository.save(item);
+                break;
+            }
+        }
+    }
 }

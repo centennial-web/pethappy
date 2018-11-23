@@ -44,12 +44,10 @@ public class ProductDetailsActivity extends BaseActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             new SimpleTask<Void, Boolean>(
-                    none -> {
-                        getApp().cartServices.addItemToCart(productId);
-                        return true;
-                    },
+                    none -> getApp().cartServices.addItemToCart(productId),
                     ok -> {
                         if (ok) {
+                            setResult(RESULT_OK);
                             Snackbar.make(view, "Product added to the cart", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }
