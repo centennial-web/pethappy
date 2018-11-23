@@ -49,7 +49,7 @@ public class CartsController {
                                             @RequestParam("userId") Long userId,
                                             @RequestParam("productId") Long productId) {
         try {
-            cartsService.deleteItem(deviceId, userId, productId);
+            cartsService.removeItem(deviceId, userId, productId);
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

@@ -1,7 +1,6 @@
 package ca.pethappy.pethappy.android.ui.cart;
 
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
@@ -36,7 +36,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         this.cartAdapterEventsListener = cartAdapterEventsListener;
     }
 
-    public void updateData(List<CartItem> cartItems) {
+    public void updateData(final List<CartItem> cartItems) {
         final CartDiffCallback diffCallback = new CartDiffCallback(this.cartItems, cartItems);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.cartItems.clear();
@@ -113,7 +113,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     none -> app.cartServices.removeItemFromCart(cartItem.product.id),
                     ok -> {
                         if (ok) {
-                            viewHolder.quantityTxt.setText("Quantity: " + (--cartItem.quantity));
+                            int newQuantity = --cartItem.quantity;
+                            List<CartItem> newCartItems = new ArrayList<>();
+
+                            // Remove item
+                            if (newQuantity <= 0) {
+                                for (CartItem item : cartItems) {
+                                    if (!item.product.id.equals(cartItem.product.id)) {
+                                        newCartItems.add(item);
+                                    }
+                                }
+                                updateData(newCartItems);
+                            }
+                            // Just update the quantity
+                            else {
+                                viewHolder.quantityTxt.setText("Quantity: " + newQuantity);
+                            }
                         }
                     },
                     error -> {
@@ -165,7 +180,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     public interface CartAdapterEventsListener {
         void onItemClick(CartItem cartItem, View view);
+
         void onPlusClick(CartItem cartItem, View view);
+
         void onMinusClick(CartItem cartItem, View view);
     }
 }

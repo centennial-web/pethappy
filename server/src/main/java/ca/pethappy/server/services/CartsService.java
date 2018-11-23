@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -105,10 +103,11 @@ public class CartsService {
         }
     }
 
-    public void deleteItem(String deviceId, Long userId, Long productId) throws IllegalArgumentException {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void removeItem(String deviceId, Long userId, Long productId) throws IllegalArgumentException {
         Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);
 
-        // Create if not exists
+        // Cart not exists
         if (cart == null) {
             throw new IllegalArgumentException("Cart not found");
         }
@@ -116,9 +115,18 @@ public class CartsService {
         // Update product quantity
         for (int i = 0; i < cart.getItems().size(); i++) {
             CartItem item = cart.getItems().get(i);
+
+            // This is the cart item we want
             if (item.getProduct().getId().equals(productId)) {
-                item.setQuantity(item.getQuantity() - 1);
-                cartItemsRepository.save(item);
+                // Remove the item if only one item in cart
+                if (item.getQuantity() == 1) {
+                    cart.getItems().remove(i);
+                }
+                // Just decrement quantity
+                else {
+                    item.setQuantity(item.getQuantity() - 1);
+                }
+                // We found the item we want to update/delete
                 break;
             }
         }

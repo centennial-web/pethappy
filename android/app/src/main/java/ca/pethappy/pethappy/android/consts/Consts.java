@@ -2,7 +2,7 @@ package ca.pethappy.pethappy.android.consts;
 
 public final class Consts {
     // URLs
-    public static final String SERVER_URL = "http://f50bda8f.ngrok.io";
+    public static final String SERVER_URL = "http://6ebcf86b.ngrok.io";
     public static final String AWS_S3_URL = "https://s3.amazonaws.com/pet-happy-imgs";
 
     // Preferences
