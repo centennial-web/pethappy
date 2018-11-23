@@ -5,14 +5,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "manufacturers")
 public class Manufacturer {
+    private Long id;
+    private String name;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "bigserial")
-    private Long id;
-
-    @Column(name = "name", length = 100, nullable = false)
-    private String name;
-
     public Long getId() {
         return id;
     }
@@ -21,6 +19,7 @@ public class Manufacturer {
         this.id = id;
     }
 
+    @Column(name = "name", length = 100, nullable = false)
     public String getName() {
         return name;
     }

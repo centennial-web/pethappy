@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,6 @@ import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
-import ca.pethappy.pethappy.android.utils.glide.GlideApp;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private final List<Product> products;
@@ -67,12 +64,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         viewHolder.priceTxt.setText("CDN$ " + NumberFormatter.getInstance().formatNumber2(product.price));
 
         // Photo
-        // TODO: 20/11/18 Picture placeholder, error and fallback
-        GlideApp.with(viewHolder.itemView.getContext())
+        Picasso.get()
                 .load(Consts.AWS_S3_URL + "/" + product.imageUrl)
-                .apply(RequestOptions
-                        .diskCacheStrategyOf(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.placeholder))
+                .placeholder(R.drawable.placeholder)
                 .into(viewHolder.pictureImv);
 
         // Product click

@@ -26,8 +26,7 @@ import ca.pethappy.pethappy.android.utils.badge.QBadgeView;
 import ca.pethappy.pethappy.android.utils.navigator.BottomNavigationViewEx;
 
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,
-        BottomNavigationView.OnNavigationItemSelectedListener,
-        CartBadgeListener {
+        BottomNavigationView.OnNavigationItemSelectedListener, CartBadgeListener {
     private static final int OPEN_SUBSCRIPTIONS_REQUEST = 1;
     private static final int OPEN_SETTINGS_REQUEST = 2;
 

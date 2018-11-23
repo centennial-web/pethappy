@@ -86,7 +86,7 @@ public class ProductFragment extends BaseFragment {
         // Adapter
         productAdapter = new ProductAdapter((product, view) -> {
             Intent productDetailsIntent = new Intent(getContext(), ProductDetailsActivity.class);
-            productDetailsIntent.putExtra("productId", product.id);
+            productDetailsIntent.putExtra(ProductDetailsActivity.EXTRA_PRODUCT_ID, product.id);
             startActivity(productDetailsIntent);
         });
 

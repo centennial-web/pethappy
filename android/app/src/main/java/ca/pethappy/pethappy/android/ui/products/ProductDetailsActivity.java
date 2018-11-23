@@ -1,5 +1,6 @@
 package ca.pethappy.pethappy.android.ui.products;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,20 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
+import com.squareup.picasso.Picasso;
 
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
-import ca.pethappy.pethappy.android.utils.glide.GlideApp;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 import retrofit2.Response;
 
 public class ProductDetailsActivity extends BaseActivity {
+    public static final String EXTRA_PRODUCT_ID = "productId";
+
     // Components
     private ImageView pictureImv;
 
@@ -38,12 +38,28 @@ public class ProductDetailsActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Product id
+        long productId = getIntent().getLongExtra(EXTRA_PRODUCT_ID, 0L);
+
         // Fab
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            // TODO: 22/11/18 Add ptoduct to the cart
-            Snackbar.make(view, "Product added to the cart", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            new SimpleTask<Void, Boolean>(
+                    none -> {
+                        boolean result = getApp().cartServices.addItemToCart(productId);
+                        return result;
+                    },
+                    added -> {
+                        if (added) {
+                            Snackbar.make(view, "Product added to the cart", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    },
+                    error -> {
+                        Toast.makeText(getApplicationContext(), "Something went wrong. " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        System.out.println(error.getMessage());
+                    }
+            ).execute((Void) null);
         });
 
         // Components
@@ -51,8 +67,8 @@ public class ProductDetailsActivity extends BaseActivity {
         pictureImv.setImageResource(R.drawable.placeholder);
 
         // Query products
-        new SimpleTask<Long, Product>(
-                productId -> {
+        new SimpleTask<Void, Product>(
+                none -> {
                     Response<Product> response = getApp().noSecEndpoints.productsFindById(productId).execute();
                     if (response.isSuccessful()) {
                         return response.body();
@@ -62,12 +78,11 @@ public class ProductDetailsActivity extends BaseActivity {
                 product -> {
                     if (product != null) {
                         // Get photo
-                        GlideApp.with(ProductDetailsActivity.this)
+                        Picasso.get()
                                 .load(Consts.AWS_S3_URL + "/" + product.imageUrl)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .apply(RequestOptions
-                                        .diskCacheStrategyOf(DiskCacheStrategy.ALL)
-                                        .placeholder(R.drawable.placeholder))
+                                .placeholder(R.drawable.placeholder)
+                                .resize(pictureImv.getWidth(), pictureImv.getHeight())
+                                .centerInside()
                                 .into(pictureImv);
 
                         ((TextView) findViewById(R.id.nameTxt)).setText(product.name);
@@ -83,7 +98,7 @@ public class ProductDetailsActivity extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
                     finish();
                 }
-        ).execute(getIntent().getLongExtra("productId", 0L));
+        ).execute((Void) null);
     }
 
     @Override

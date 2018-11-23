@@ -88,7 +88,7 @@ public class SecurityConfig {
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .csrf();
+                    .csrf().disable();
         }
 
         @Bean

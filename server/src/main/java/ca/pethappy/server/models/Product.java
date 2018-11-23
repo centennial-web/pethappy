@@ -6,41 +6,20 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "products")
 public class Product {
+    private Long id;
+    private Category category;
+    private Manufacturer manufacturer;
+    private Ingredient ingredient;
+    private String name;
+    private String description;
+    private String imageUrl;
+    private BigDecimal weightKg;
+    private BigDecimal price;
+    private BigDecimal quantity;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "bigserial")
-    private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @OneToOne
-    @JoinColumn(name = "manufacturer_id")
-    private Manufacturer manufacturer;
-
-    @OneToOne
-    @JoinColumn(name = "mainingredient_id")
-    private Ingredient ingredient;
-
-    @Column(name = "name", length = 100, nullable = false)
-    private String name;
-
-    @Column(name = "description", length = 100, nullable = false)
-    private String description;
-
-    @Column(name = "image_url", length = 500)
-    private String imageUrl;
-
-    @Column(name = "weight_kg")
-    private BigDecimal weightKg;
-
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
-    @Column(name = "quantity", nullable = false)
-    private BigDecimal quantity;
-
     public Long getId() {
         return id;
     }
@@ -49,6 +28,8 @@ public class Product {
         this.id = id;
     }
 
+    @OneToOne
+    @JoinColumn(name = "category_id")
     public Category getCategory() {
         return category;
     }
@@ -57,6 +38,8 @@ public class Product {
         this.category = category;
     }
 
+    @OneToOne
+    @JoinColumn(name = "manufacturer_id")
     public Manufacturer getManufacturer() {
         return manufacturer;
     }
@@ -65,6 +48,8 @@ public class Product {
         this.manufacturer = manufacturer;
     }
 
+    @OneToOne
+    @JoinColumn(name = "mainingredient_id")
     public Ingredient getIngredient() {
         return ingredient;
     }
@@ -73,6 +58,7 @@ public class Product {
         this.ingredient = ingredient;
     }
 
+    @Column(name = "name", length = 100, nullable = false)
     public String getName() {
         return name;
     }
@@ -81,6 +67,7 @@ public class Product {
         this.name = name;
     }
 
+    @Column(name = "description", length = 100, nullable = false)
     public String getDescription() {
         return description;
     }
@@ -89,6 +76,7 @@ public class Product {
         this.description = description;
     }
 
+    @Column(name = "image_url", length = 500)
     public String getImageUrl() {
         return imageUrl;
     }
@@ -97,6 +85,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    @Column(name = "weight_kg")
     public BigDecimal getWeightKg() {
         return weightKg;
     }
@@ -105,6 +94,7 @@ public class Product {
         this.weightKg = weightKg;
     }
 
+    @Column(name = "price", nullable = false)
     public BigDecimal getPrice() {
         return price;
     }
@@ -113,6 +103,7 @@ public class Product {
         this.price = price;
     }
 
+    @Column(name = "quantity", nullable = false)
     public BigDecimal getQuantity() {
         return quantity;
     }

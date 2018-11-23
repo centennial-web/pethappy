@@ -7,21 +7,17 @@ import java.util.Collection;
 @Entity
 @Table(name = "roles")
 public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "bigserial")
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
     public Role() {
         users = new ArrayList<>();
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "bigserial")
     public Long getId() {
         return id;
     }
@@ -30,6 +26,7 @@ public class Role {
         this.id = id;
     }
 
+    @Column(nullable = false, unique = true)
     public String getName() {
         return name;
     }
@@ -38,6 +35,7 @@ public class Role {
         this.name = name;
     }
 
+    @ManyToMany(mappedBy = "roles")
     public Collection<User> getUsers() {
         return users;
     }

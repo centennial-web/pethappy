@@ -33,6 +33,7 @@ public class CartFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
     private CartBadgeListener cartBadgeListener;
+    private CartListener cartListener;
 
     public CartFragment() {
         // Required empty public constructor
@@ -107,6 +108,12 @@ public class CartFragment extends BaseFragment {
             cartBadgeListener = (CartBadgeListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement CartBadgeListener");
+        }
+
+        if (context instanceof CartListener) {
+            cartListener = (CartListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement CartListener");
         }
     }
 

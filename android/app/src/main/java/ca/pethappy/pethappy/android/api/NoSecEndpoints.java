@@ -1,8 +1,11 @@
 package ca.pethappy.pethappy.android.api;
 
+import java.util.UUID;
+
 import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.models.forms.AddCartItem;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,4 +23,10 @@ public interface NoSecEndpoints {
 
     @GET("/api/products/findById/{id}")
     Call<Product> productsFindById(@Path("id") Long id);
+
+    @GET("/api/carts/itemCount/{deviceId}")
+    Call<Integer> cartItemsCount(@Path("deviceId") String deviceId);
+
+    @POST("/api/carts/addItem")
+    Call<Boolean> cartAddItem(@Body AddCartItem cartItem);
 }
