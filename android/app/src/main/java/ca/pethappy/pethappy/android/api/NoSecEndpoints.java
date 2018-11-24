@@ -39,4 +39,7 @@ public interface NoSecEndpoints {
     @DELETE("/api/carts/removeItem")
     Call<Boolean> cartDeleteItem(@Query("deviceId") String deviceId, @Query("userId") Long userId,
                                  @Query("productId") Long productId);
+
+    @GET("/api/carts/itemQuantity")
+    Call<Integer> cartItemQuantity(@Query("deviceId") String deviceId, @Query("userId") Long userId);
 }

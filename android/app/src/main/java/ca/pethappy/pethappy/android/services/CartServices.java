@@ -53,13 +53,13 @@ public class CartServices {
         throw new IOException("Couldn't remove item to the cart");
     }
 
-    public int getItemCount() throws IOException {
-        Response<Integer> response = app.noSecEndpoints.cartItemsCount(app.getDeviceId()).execute();
-        Integer itemsCount;
-        if (response.isSuccessful() && (itemsCount = response.body()) != null) {
-            return itemsCount;
+    public int cartItemQuantity() throws IOException {
+        Response<Integer> response = app.noSecEndpoints
+                .cartItemQuantity(app.getDeviceId(), app.getUserInfo().id).execute();
+        Integer itemQuantity;
+        if (response.isSuccessful() && (itemQuantity = response.body()) != null) {
+            return itemQuantity;
         }
-        throw new IOException("Couldn't get cart items count");
-
+        throw new IOException("Couldn't get cart items quantity");
     }
 }

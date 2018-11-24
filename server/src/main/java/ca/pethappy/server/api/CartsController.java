@@ -1,8 +1,6 @@
 package ca.pethappy.server.api;
 
 import ca.pethappy.server.forms.AddCartItem;
-import ca.pethappy.server.models.CartItem;
-import ca.pethappy.server.models.Product;
 import ca.pethappy.server.services.CartsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,10 +21,15 @@ public class CartsController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/api/carts/itemCount/{deviceId}")
-    public ResponseEntity<?> cartItemsCount(@PathVariable String deviceId, Principal principal) {
-        int items = cartsService.getItemCount(UUID.fromString(deviceId), 1L);
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+    @GetMapping(value = "/api/carts/itemQuantity")
+    public ResponseEntity<?> cartItemQuantity(@RequestParam("deviceId") String deviceId,
+                                              @RequestParam("userId") Long userId) {
+        try {
+            int quantity = cartsService.getItemQuantity(UUID.fromString(deviceId), userId);
+            return new ResponseEntity<>(quantity, HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("isAuthenticated()")

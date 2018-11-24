@@ -12,11 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.List;
+
 import ca.pethappy.pethappy.android.R;
+import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
-import ca.pethappy.pethappy.android.ui.cart.CartBadgeListener;
 import ca.pethappy.pethappy.android.ui.cart.CartFragment;
+import ca.pethappy.pethappy.android.ui.cart.CartListener;
 import ca.pethappy.pethappy.android.ui.login.LoginActivity;
 import ca.pethappy.pethappy.android.ui.products.ProductFragment;
 import ca.pethappy.pethappy.android.ui.settings.SettingsFragment;
@@ -24,9 +27,11 @@ import ca.pethappy.pethappy.android.ui.subscriptions.SubscriptionsFragment;
 import ca.pethappy.pethappy.android.utils.badge.Badge;
 import ca.pethappy.pethappy.android.utils.badge.QBadgeView;
 import ca.pethappy.pethappy.android.utils.navigator.BottomNavigationViewEx;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,
-        BottomNavigationView.OnNavigationItemSelectedListener, CartBadgeListener {
+        BottomNavigationView.OnNavigationItemSelectedListener,
+        CartListener {
     private static final int OPEN_SUBSCRIPTIONS_REQUEST = 1;
     private static final int OPEN_SETTINGS_REQUEST = 2;
 
@@ -66,9 +71,15 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         // Badge
         badge = new QBadgeView(this)
                 .setBadgeNumber(0)
-                .setGravityOffset(20, 2, true)
+                .setGravityOffset(25, 2, true)
                 .setShowShadow(true)
                 .bindTarget(navigation.getBottomNavigationItemView(2));
+        new SimpleTask<Void, Integer>(
+                ignored -> getApp().cartServices.cartItemQuantity(),
+                itemQuantity -> badge.setBadgeNumber(itemQuantity),
+                error -> badge.setBadgeNumber(0)
+        ).execute((Void) null);
+
     }
 
     @Override
@@ -174,7 +185,24 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     }
 
     @Override
-    public void onUpdateBadge(int number) {
+    public void addItemToCart(long productId, List<CartItem> cartItems) {
+        int quantity = 0;
+        for (CartItem item : cartItems) {
+            quantity += item.quantity;
+        }
+        updateBadgeNumber(quantity);
+    }
+
+    @Override
+    public void removeItemFromCart(long productId, List<CartItem> cartItems) {
+        int quantity = 0;
+        for (CartItem item : cartItems) {
+            quantity += item.quantity;
+        }
+        updateBadgeNumber(quantity);
+    }
+
+    private void updateBadgeNumber(int number) {
         // Hide
         if (number <= 0) {
             badge.hide(true);
@@ -184,8 +212,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         badge.setBadgeNumber(number);
     }
 
-    @Override
-    public int getNumber() {
-        return badge.getBadgeNumber();
-    }
+//    @Override
+//    public void onUpdateBadge(int number) {
+//        // Hide
+//        if (number <= 0) {
+//            badge.hide(true);
+//            return;
+//        }
+//        // Update number
+//        badge.setBadgeNumber(number);
+//    }
 }

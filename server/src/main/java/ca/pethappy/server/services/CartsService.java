@@ -40,6 +40,12 @@ public class CartsService {
     }
 
     @Transactional(readOnly = true)
+    public int getItemQuantity(UUID deviceId, Long userId) {
+        return cartsRepository.findByDeviceIdAndUserId(deviceId, userId)
+                .getItems().stream().mapToInt(CartItem::getQuantity).sum();
+    }
+
+    @Transactional(readOnly = true)
     public List<CartItem> cartItems(String deviceId, Long userId) {
         // Get cart
         Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);

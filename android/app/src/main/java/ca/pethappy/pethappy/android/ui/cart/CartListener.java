@@ -1,9 +1,10 @@
 package ca.pethappy.pethappy.android.ui.cart;
 
-import java.io.IOException;
+import java.util.List;
+
+import ca.pethappy.pethappy.android.models.backend.CartItem;
 
 public interface CartListener {
-    boolean addItemToCart(long productId) throws IOException;
-    void removeItemFromCart(long productId);
-    int getItemCount() throws IOException;
+    void addItemToCart(long productId, List<CartItem> cartItems);
+    void removeItemFromCart(long productId, List<CartItem> cartItems);
 }
