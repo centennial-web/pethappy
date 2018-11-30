@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,18 +28,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final List<CartItem> cartItems;
     private final CartAdapterEventsListener cartAdapterEventsListener;
 
-    public CartAdapter(App app, CartAdapterEventsListener cartAdapterEventsListener) {
+    CartAdapter(App app, CartAdapterEventsListener cartAdapterEventsListener) {
         this(app, null, cartAdapterEventsListener);
     }
 
-    public CartAdapter(App app, final List<CartItem> cartItems,
-                       CartAdapterEventsListener cartAdapterEventsListener) {
+    private CartAdapter(App app, final List<CartItem> cartItems,
+                        CartAdapterEventsListener cartAdapterEventsListener) {
         this.app = app;
         this.cartItems = (cartItems == null) ? new ArrayList<>() : cartItems;
         this.cartAdapterEventsListener = cartAdapterEventsListener;
     }
 
-    public void updateData(final List<CartItem> cartItems) {
+    void updateData(final List<CartItem> cartItems) {
         final CartDiffCallback diffCallback = new CartDiffCallback(this.cartItems, cartItems);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.cartItems.clear();
@@ -102,16 +103,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         });
     }
 
-//    public List<CartItem> getCartItems() {
-//        return cartItems;
-//    }
-
     @Override
     public int getItemCount() {
         return cartItems.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
         TextView manufacturerTxt;
         TextView categoryTxt;
@@ -142,10 +139,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     public interface CartAdapterEventsListener {
-        void onItemClick(CartItem cartItem, ViewHolder viewHolder);
+        void onItemClick(CartItem cartItem, final ViewHolder viewHolder);
 
-        void onPlusClick(CartItem cartItem, ViewHolder viewHolder);
+        void onPlusClick(CartItem cartItem, final ViewHolder viewHolder);
 
-        void onMinusClick(CartItem cartItem, ViewHolder viewHolder);
+        void onMinusClick(CartItem cartItem, final ViewHolder viewHolder);
     }
 }

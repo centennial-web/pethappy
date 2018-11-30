@@ -53,6 +53,8 @@ public class CartFragment extends BaseFragment {
 
             @Override
             public void onPlusClick(CartItem cartItem, CartAdapter.ViewHolder viewHolder) {
+                viewHolder.minusBtn.setEnabled(false);
+                
                 // Add item
                 new SimpleTask<Void, List<CartItem>>(
                         ignored -> getApp().cartServices.addItemToCart(cartItem.product.id)
@@ -69,17 +71,21 @@ public class CartFragment extends BaseFragment {
                             if (cartListener != null) {
                                 cartListener.addItemToCart(cartItem.product.id, cartItems);
                             }
+
+                            viewHolder.minusBtn.setEnabled(true);
                         },
                         error -> {
                             Toast.makeText(getApp().getApplicationContext(), "Something went wrong. "
                                     + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            System.out.println(error.getMessage());
+                            viewHolder.minusBtn.setEnabled(true);
                         }
                 ).execute((Void) null);
             }
 
             @Override
             public void onMinusClick(CartItem cartItem, CartAdapter.ViewHolder viewHolder) {
+                viewHolder.minusBtn.setEnabled(false);
+
                 // Remove item
                 new SimpleTask<Void, List<CartItem>>(
                         ignored -> getApp().cartServices.removeItemFromCart(cartItem.product.id)
@@ -96,11 +102,13 @@ public class CartFragment extends BaseFragment {
                             if (cartListener != null) {
                                 cartListener.removeItemFromCart(cartItem.product.id, cartItems);
                             }
+
+                            viewHolder.minusBtn.setEnabled(true);
                         },
                         error -> {
                             Toast.makeText(getApp().getApplicationContext(), "Something went wrong. "
                                     + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            System.out.println(error.getMessage());
+                            viewHolder.minusBtn.setEnabled(true);
                         }
                 ).execute((Void) null);
             }
@@ -132,14 +140,22 @@ public class CartFragment extends BaseFragment {
      * update the total label.
      */
     private void updateTotal(final List<CartItem> cartItems) {
+        // Get totalTxt reference
+        final TextView totalTxt;
+        if (getView() == null || (totalTxt = getView().findViewById(R.id.totalTxt)) == null) {
+            return;
+        }
+
+        // Sum
         int quantity = 0;
         BigDecimal total = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
             quantity += cartItem.quantity;
             total = total.add(cartItem.product.price.multiply(BigDecimal.valueOf(cartItem.quantity)));
         }
-        ((TextView) getView().findViewById(R.id.totalTxt))
-                .setText(quantity + " / CDN$ " + NumberFormatter.getInstance().formatNumber2(total));
+
+        // Show the result
+        totalTxt.setText(quantity + " / CDN$ " + NumberFormatter.getInstance().formatNumber2(total));
     }
 
     @Override

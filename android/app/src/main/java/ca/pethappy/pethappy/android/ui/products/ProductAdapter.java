@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -70,9 +71,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 .into(viewHolder.pictureImv);
 
         // Product click
-        viewHolder.productCardview.setOnClickListener(v -> {
+        viewHolder.productCardview.setOnClickListener(productCardView -> {
             if (productAdapterEventsListener != null) {
-                productAdapterEventsListener.onItemClick(product, v);
+                productAdapterEventsListener.onItemClick(product, productCardView);
+            }
+        });
+        viewHolder.plusBtn.setOnClickListener(plusBtnView -> {
+            if (productAdapterEventsListener != null) {
+                productAdapterEventsListener.onPlusItemClick(product, plusBtnView);
             }
         });
     }
@@ -90,6 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         TextView weightKgTxt;
         TextView priceTxt;
         ImageView pictureImv;
+        ImageButton plusBtn;
         CardView productCardview;
 
         ViewHolder(@NonNull View itemView) {
@@ -102,11 +109,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             weightKgTxt = itemView.findViewById(R.id.weightKgTxt);
             priceTxt = itemView.findViewById(R.id.priceTxt);
             pictureImv = itemView.findViewById(R.id.pictureImv);
+            plusBtn = itemView.findViewById(R.id.plusBtn);
             productCardview = itemView.findViewById(R.id.productCardview);
         }
     }
 
     public interface ProductAdapterEventsListener {
-        void onItemClick(Product product, View view);
+        void onItemClick(Product product, final View productCardView);
+
+        void onPlusItemClick(Product product, final View plusBtnView);
     }
 }

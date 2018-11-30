@@ -21,7 +21,6 @@
 
     <ImageView
         android:id="@+id/pictureImv"
-        android:transitionName="productPhoto"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginStart="8dp"
@@ -29,6 +28,7 @@
         android:layout_marginBottom="8dp"
         android:contentDescription="Product Picture"
         android:scaleType="fitStart"
+        android:transitionName="productPhoto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +70,7 @@
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/holo_green_dark"
         android:textSize="6pt"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/plusBtn"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
         app:layout_constraintTop_toBottomOf="@+id/categoryTxt"
         tools:text="ingredientTxt" />
@@ -99,10 +99,24 @@
         android:textColor="@android:color/holo_red_dark"
         android:textSize="7pt"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/plusBtn"
         app:layout_constraintStart_toEndOf="@+id/weightKgTxt"
         app:layout_constraintTop_toBottomOf="@+id/ingredientTxt"
         app:layout_constraintVertical_bias="0.0"
         tools:text="priceTxt" />
+
+    <ImageButton
+        android:id="@+id/plusBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/accentColor"
+        android:elevation="10dp"
+        android:tint="@color/backgroundColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryTxt"
+        app:srcCompat="@drawable/ic_add_shopping_cart_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>

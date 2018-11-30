@@ -202,6 +202,11 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         updateBadgeNumber(quantity);
     }
 
+    @Override
+    public void refreshCart() {
+
+    }
+
     private void updateBadgeNumber(int number) {
         // Hide
         if (number <= 0) {
