@@ -121,7 +121,7 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
                         .commit();
                 return true;
             case R.id.navigation_subscriptions:
-                if (!getApp().isUserLogged()) {
+                if (getApp().userIsNotLogged()) {
                     startActivityForResult(new Intent(this, LoginActivity.class), OPEN_SUBSCRIPTIONS_REQUEST);
                     return false;
                 } else {
@@ -138,7 +138,7 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
                         .commit();
                 return true;
             case R.id.navigation_settings:
-                if (!getApp().isUserLogged()) {
+                if (getApp().userIsNotLogged()) {
                     startActivityForResult(new Intent(this, LoginActivity.class), OPEN_SETTINGS_REQUEST);
                     return false;
                 } else {

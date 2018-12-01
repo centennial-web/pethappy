@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.moshi.Moshi;
 
 import java.math.BigDecimal;
@@ -42,6 +43,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
 
         // Services
         this.cartServices = new CartServices(this);
@@ -90,12 +96,12 @@ public class App extends Application {
         return prefs.getString(USER_TOKEN, null);
     }
 
-    public boolean isUserLogged() {
+    public boolean userIsNotLogged() {
         String localUserToken = getLocalUserToken();
         if (localUserToken == null) {
-            return false;
+            return true;
         }
-        return JWT.decode(localUserToken).getExpiresAt().compareTo(new Date()) >= 0;
+        return JWT.decode(localUserToken).getExpiresAt().compareTo(new Date()) < 0;
     }
 
     public void logoutUser() {
