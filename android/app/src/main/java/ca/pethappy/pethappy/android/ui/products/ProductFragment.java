@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import retrofit2.Response;
 public class ProductFragment extends BaseFragment {
     private ProductAdapter productAdapter;
     private CartListener cartListener;
+    private SwipeRefreshLayout swipeContainer;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -37,6 +39,14 @@ public class ProductFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Get view root
         final View rootView = inflater.inflate(R.layout.fragment_product, container, false);
+
+        // Swipe to refresh
+        swipeContainer = rootView.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(this::queryProducts);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         // AdaptergetPackageName
         productAdapter = new ProductAdapter(new ProductAdapter.ProductAdapterEventsListener() {
@@ -76,19 +86,28 @@ public class ProductFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(productAdapter);
 
-        final App app = getApp();
-
         // Query products
+        queryProducts();
+
+        return rootView;
+    }
+
+    private void queryProducts() {
+        final App app = getApp();
         new SimpleTask<Void, Page<ProductWithoutDescription>>(
                 none -> {
                     Response<Page<ProductWithoutDescription>> response = app.endpoints.productsFindAllWithoutDescription().execute();
                     return (response.isSuccessful()) ? response.body() : new Page<>();
                 },
-                payload -> productAdapter.updateData(payload.content),
-                error -> Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+                payload -> {
+                    productAdapter.updateData(payload.content);
+                    swipeContainer.setRefreshing(false);
+                },
+                error -> {
+                    swipeContainer.setRefreshing(false);
+                    Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }
         ).execute((Void) null);
-
-        return rootView;
     }
 
     @Override

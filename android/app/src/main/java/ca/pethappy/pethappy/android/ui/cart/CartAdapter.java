@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +44,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         this.cartItems.clear();
         this.cartItems.addAll(cartItems);
         diffResult.dispatchUpdatesTo(this);
+    }
+
+    public void clear() {
+        cartItems.clear();
+        notifyDataSetChanged();
     }
 
     @NonNull
