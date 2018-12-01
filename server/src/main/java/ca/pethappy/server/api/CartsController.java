@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 public class CartsController {
     private final CartsService cartsService;
@@ -25,7 +23,7 @@ public class CartsController {
     public ResponseEntity<?> cartItemQuantity(@RequestParam("deviceId") String deviceId,
                                               @RequestParam("userId") Long userId) {
         try {
-            int quantity = cartsService.getItemQuantity(UUID.fromString(deviceId), userId);
+            int quantity = cartsService.getItemQuantity(deviceId, userId);
             return new ResponseEntity<>(quantity, HttpStatus.OK);
         } catch (Throwable t) {
             return new ResponseEntity<>(t.getMessage(), HttpStatus.BAD_REQUEST);

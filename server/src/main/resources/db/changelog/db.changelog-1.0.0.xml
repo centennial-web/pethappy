@@ -524,4 +524,17 @@
                                  referencedColumnNames="id" onUpdate="CASCADE" onDelete="NO ACTION"/>
     </changeSet>
 
+    <!--Change carts.device_id data type -->
+    <changeSet id="21" author="rodrigo">
+        <addColumn tableName="carts">
+            <column name="device_id2" type="text" />
+        </addColumn>
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            UPDATE carts SET device_id2 = device_id;
+        </sql>
+        <dropColumn tableName="carts" columnName="device_id"/>
+        <renameColumn tableName="carts" oldColumnName="device_id2" newColumnName="device_id" />
+        <addNotNullConstraint tableName="carts" columnName="device_id"/>
+    </changeSet>
+
 </databaseChangeLog>

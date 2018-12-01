@@ -30,6 +30,12 @@ public class ProductsController {
         return new ResponseEntity<>(productsService.findAll(pageable), HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/api/products/findAllWithoutDescription")
+    public ResponseEntity<?> findAllWithoutDescription(@Nullable final Pageable pageable) {
+        return new ResponseEntity<>(productsService.findAllWithoutDescription(pageable), HttpStatus.OK);
+    }
+
     @SuppressWarnings("OptionalIsPresent")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/api/products/findById/{id}")

@@ -4,7 +4,6 @@ import ca.pethappy.server.models.Cart;
 import ca.pethappy.server.models.CartItem;
 import ca.pethappy.server.models.Product;
 import ca.pethappy.server.models.User;
-import ca.pethappy.server.repositories.CartItemsRepository;
 import ca.pethappy.server.repositories.CartsRepository;
 import ca.pethappy.server.repositories.ProductsRepository;
 import ca.pethappy.server.repositories.UsersRepository;
@@ -14,72 +13,66 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CartsService {
     private final CartsRepository cartsRepository;
-    private final CartItemsRepository cartItemsRepository;
     private final UsersRepository usersRepository;
     private final ProductsRepository productsRepository;
 
     @Autowired
-    public CartsService(CartsRepository cartsRepository, CartItemsRepository cartItemsRepository,
-                        UsersRepository usersRepository, ProductsRepository productsRepository) {
+    public CartsService(CartsRepository cartsRepository, UsersRepository usersRepository,
+                        ProductsRepository productsRepository) {
         this.cartsRepository = cartsRepository;
-        this.cartItemsRepository = cartItemsRepository;
         this.usersRepository = usersRepository;
         this.productsRepository = productsRepository;
     }
 
-    @Transactional(readOnly = true)
-    public int getItemCount(UUID deviceId, Long userId) {
-        Cart cart = cartsRepository.findByDeviceIdAndUserId(deviceId, userId);
-        return cart.getItems().size();
-    }
+    @SuppressWarnings("Duplicates")
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int getItemCount(String deviceId, Long userId) throws IllegalArgumentException {
+        Optional<Cart> cartOpt = cartsRepository.findByDeviceIdAndUserId(deviceId, userId);
 
-    @Transactional(readOnly = true)
-    public int getItemQuantity(UUID deviceId, Long userId) {
-        return cartsRepository.findByDeviceIdAndUserId(deviceId, userId)
-                .getItems().stream().mapToInt(CartItem::getQuantity).sum();
-    }
-
-    @Transactional(readOnly = true)
-    public List<CartItem> cartItems(String deviceId, Long userId) {
-        // Get cart
-        Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);
-        if (cart == null) {
-            throw new IllegalArgumentException("Cart not found");
+        // Return the current cart items count
+        if (cartOpt.isPresent()) {
+            return cartOpt.get().getItems().size();
         }
+        // Create new cart for the user
+        else {
+            User user = usersRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            Cart newCart = new Cart();
+            newCart.setUser(user);
+            newCart.setDeviceId(deviceId);
+            cartsRepository.save(newCart);
+            return 0;
+        }
+    }
 
-        return cart.getItems();
+    @SuppressWarnings("Duplicates")
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int getItemQuantity(String deviceId, Long userId) throws IllegalArgumentException {
+        return getOrCreateCart(deviceId, userId).getItems().stream().mapToInt(CartItem::getQuantity).sum();
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<CartItem> cartItems(String deviceId, Long userId) throws IllegalArgumentException {
+        return getOrCreateCart(deviceId, userId).getItems();
     }
 
     @SuppressWarnings("Duplicates")
     @Transactional(propagation = Propagation.REQUIRED)
     public void addItem(String deviceId, Long userId, Long productId) throws IllegalArgumentException {
-        Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);
-
-        // Create if not exists
-        if (cart == null) {
-            // Get user
-            User user = usersRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-            // Create cart
-            cart = new Cart();
-            cart.setDeviceId(UUID.fromString(deviceId));
-            cart.setUser(user);
-            cartsRepository.save(cart);
-        }
+        Cart cart = getOrCreateCart(deviceId, userId);
 
         // Get product
         Product product = productsRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         // No items
-        if (cart.getItems().size() <= 0) {
+        if (cart.getItems().size() == 0) {
             // Add item to the cart
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
@@ -90,7 +83,9 @@ public class CartsService {
         // We have one or more items
         else {
             // Query for the product by id
-            List<CartItem> cartItems = cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId))
+            List<CartItem> cartItems = cart.getItems()
+                    .stream()
+                    .filter(item -> item.getProduct().getId().equals(productId))
                     .collect(Collectors.toList());
 
             // The product is in the cart
@@ -111,22 +106,17 @@ public class CartsService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeItem(String deviceId, Long userId, Long productId) throws IllegalArgumentException {
-        Cart cart = cartsRepository.findByDeviceIdAndUserId(UUID.fromString(deviceId), userId);
-
-        // Cart not exists
-        if (cart == null) {
-            throw new IllegalArgumentException("Cart not found");
-        }
+        List<CartItem> cartItems = getOrCreateCart(deviceId, userId).getItems();
 
         // Update product quantity
-        for (int i = 0; i < cart.getItems().size(); i++) {
-            CartItem item = cart.getItems().get(i);
+        for (int i = 0; i < cartItems.size(); i++) {
+            CartItem item = cartItems.get(i);
 
-            // This is the cart item we want
+            // This is the cart item we want?
             if (item.getProduct().getId().equals(productId)) {
                 // Remove the item if only one item in cart
                 if (item.getQuantity() == 1) {
-                    cart.getItems().remove(i);
+                    cartItems.remove(i);
                 }
                 // Just decrement quantity
                 else {
@@ -136,5 +126,20 @@ public class CartsService {
                 break;
             }
         }
+    }
+
+    private Cart getOrCreateCart(final String deviceId, final Long userId) throws IllegalArgumentException {
+        return cartsRepository.findByDeviceIdAndUserId(deviceId, userId).orElseGet(() -> {
+            // Get user
+            User user = usersRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            // Create cart
+            Cart newCart = new Cart();
+            newCart.setDeviceId(deviceId);
+            newCart.setUser(user);
+            cartsRepository.save(newCart);
+
+            return newCart;
+        });
     }
 }

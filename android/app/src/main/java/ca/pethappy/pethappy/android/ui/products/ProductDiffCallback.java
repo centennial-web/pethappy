@@ -5,13 +5,13 @@ import android.support.v7.util.DiffUtil;
 
 import java.util.List;
 
-import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 
 public class ProductDiffCallback extends DiffUtil.Callback {
-    private final List<Product> oldList;
-    private final List<Product> newList;
+    private final List<ProductWithoutDescription> oldList;
+    private final List<ProductWithoutDescription> newList;
 
-    ProductDiffCallback(List<Product> oldList, List<Product> newList) {
+    ProductDiffCallback(List<ProductWithoutDescription> oldList, List<ProductWithoutDescription> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }

@@ -18,11 +18,11 @@ import java.util.List;
 
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
-import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
-    private final List<Product> products;
+    private final List<ProductWithoutDescription> products;
     private final ProductAdapterEventsListener productAdapterEventsListener;
 
     public ProductAdapter(ProductAdapterEventsListener productAdapterEventsListener) {
@@ -30,7 +30,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.productAdapterEventsListener = productAdapterEventsListener;
     }
 
-    public void updateData(List<Product> products) {
+    public void updateData(List<ProductWithoutDescription> products) {
         final ProductDiffCallback diffCallback = new ProductDiffCallback(this.products, products);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.products.clear();
@@ -54,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int index) {
         // Get product
-        final Product product = products.get(index);
+        final ProductWithoutDescription product = products.get(index);
 
         // Fill the views
         viewHolder.nameTxt.setText(product.name);
@@ -115,8 +115,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public interface ProductAdapterEventsListener {
-        void onItemClick(Product product, final View productCardView);
-
-        void onPlusItemClick(Product product, final View plusBtnView);
+        void onItemClick(ProductWithoutDescription product, final View productCardView);
+        void onPlusItemClick(ProductWithoutDescription product, final View plusBtnView);
     }
 }

@@ -6,6 +6,7 @@ import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.models.forms.AddCartItem;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
 import retrofit2.Call;
@@ -23,6 +24,9 @@ public interface NoSecEndpoints {
 
     @GET("/api/products/findAll")
     Call<Page<Product>> productsFindAll();
+
+    @GET("/api/products/findAllWithoutDescription")
+    Call<Page<ProductWithoutDescription>> productsFindAllWithoutDescription();
 
     @GET("/api/products/findById/{id}")
     Call<Product> productsFindById(@Path("id") Long id);

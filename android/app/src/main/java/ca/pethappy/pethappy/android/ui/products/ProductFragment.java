@@ -18,7 +18,7 @@ import ca.pethappy.pethappy.android.App;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
-import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.cart.CartListener;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
@@ -41,14 +41,14 @@ public class ProductFragment extends BaseFragment {
         // AdaptergetPackageName
         productAdapter = new ProductAdapter(new ProductAdapter.ProductAdapterEventsListener() {
             @Override
-            public void onItemClick(Product product, View productCardView) {
+            public void onItemClick(ProductWithoutDescription product, View productCardView) {
                 Intent productDetailsIntent = new Intent(getContext(), ProductDetailsActivity.class);
                 productDetailsIntent.putExtra(ProductDetailsActivity.EXTRA_PRODUCT_ID, product.id);
                 startActivity(productDetailsIntent);
             }
 
             @Override
-            public void onPlusItemClick(Product product, View plusBtnView) {
+            public void onPlusItemClick(ProductWithoutDescription product, View plusBtnView) {
                 plusBtnView.setEnabled(false);
                 new SimpleTask<Void, List<CartItem>>(
                         ignored -> getApp().cartServices.addItemToCart(product.id)
@@ -79,9 +79,9 @@ public class ProductFragment extends BaseFragment {
         final App app = getApp();
 
         // Query products
-        new SimpleTask<Void, Page<Product>>(
+        new SimpleTask<Void, Page<ProductWithoutDescription>>(
                 none -> {
-                    Response<Page<Product>> response = app.noSecEndpoints.productsFindAll().execute();
+                    Response<Page<ProductWithoutDescription>> response = app.noSecEndpoints.productsFindAllWithoutDescription().execute();
                     return (response.isSuccessful()) ? response.body() : new Page<>();
                 },
                 payload -> productAdapter.updateData(payload.content),

@@ -3,13 +3,12 @@ package ca.pethappy.server.models;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "carts")
 public class Cart {
     private Long id;
-    private UUID deviceId;
+    private String deviceId;
     private User user;
     private List<CartItem> items;
 
@@ -28,12 +27,12 @@ public class Cart {
         this.id = id;
     }
 
-    @Column(name = "device_id", nullable = false, unique = true, columnDefinition = "uuid")
-    public UUID getDeviceId() {
+    @Column(name = "device_id", nullable = false, unique = true)
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(UUID deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
