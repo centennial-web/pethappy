@@ -81,7 +81,7 @@ public class ProductFragment extends BaseFragment {
         // Query products
         new SimpleTask<Void, Page<ProductWithoutDescription>>(
                 none -> {
-                    Response<Page<ProductWithoutDescription>> response = app.noSecEndpoints.productsFindAllWithoutDescription().execute();
+                    Response<Page<ProductWithoutDescription>> response = app.endpoints.productsFindAllWithoutDescription().execute();
                     return (response.isSuccessful()) ? response.body() : new Page<>();
                 },
                 payload -> productAdapter.updateData(payload.content),

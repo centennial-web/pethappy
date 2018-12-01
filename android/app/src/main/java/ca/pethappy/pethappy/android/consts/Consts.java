@@ -8,5 +8,4 @@ public final class Consts {
     // Preferences
     public static final String DEVICE_ID = "DEVICE_ID";
     public static final String USER_TOKEN = "USER_TOKEN";
-    public static final String GUEST_TOKEN = "GUEST_TOKEN";
 }

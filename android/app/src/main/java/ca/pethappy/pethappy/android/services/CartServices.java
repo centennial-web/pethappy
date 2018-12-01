@@ -16,7 +16,7 @@ public class CartServices {
     }
 
     public List<CartItem> listItems() throws IOException {
-        Response<List<CartItem>> response = app.noSecEndpoints
+        Response<List<CartItem>> response = app.endpoints
                 .cartItems(app.getDeviceId(), app.getUserInfo().id).execute();
         List<CartItem> body;
         if (response.isSuccessful() && (body = response.body()) != null) {
@@ -31,7 +31,7 @@ public class CartServices {
         cartItem.productId = productId;
         cartItem.userId = app.getUserInfo().id;
 
-        Response<Boolean> response = app.noSecEndpoints.cartAddItem(cartItem).execute();
+        Response<Boolean> response = app.endpoints.cartAddItem(cartItem).execute();
 
         Boolean ok;
         if (response.isSuccessful() && (ok = response.body()) != null) {
@@ -41,7 +41,7 @@ public class CartServices {
     }
 
     public boolean removeItemFromCart(long productId) throws IOException {
-        Response<Boolean> response = app.noSecEndpoints.cartDeleteItem(
+        Response<Boolean> response = app.endpoints.cartDeleteItem(
                 app.getDeviceId(),
                 app.getUserInfo().id,
                 productId).execute();
@@ -54,7 +54,7 @@ public class CartServices {
     }
 
     public int cartItemQuantity() throws IOException {
-        Response<Integer> response = app.noSecEndpoints
+        Response<Integer> response = app.endpoints
                 .cartItemQuantity(app.getDeviceId(), app.getUserInfo().id).execute();
         Integer itemQuantity;
         if (response.isSuccessful() && (itemQuantity = response.body()) != null) {

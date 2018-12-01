@@ -1,23 +1,5 @@
 apply plugin: 'com.android.application'
 
-//def getGuestUser() {
-//    Properties properties = new Properties()
-//    properties.load(project.rootProject.file('secret.properties').newDataInputStream())
-//    return properties.getProperty("GUEST_USER")
-//}
-//
-//def getGuestPassword() {
-//    Properties properties = new Properties()
-//    properties.load(project.rootProject.file('secret.properties').newDataInputStream())
-//    return properties.getProperty("GUEST_PASSWORD")
-//}
-
-def getGuestData() {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('secret.properties').newDataInputStream())
-    return [properties.getProperty("GUEST_USER"), properties.getProperty("GUEST_PASSWORD")]
-}
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -29,13 +11,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        debug {
-            buildConfigField "String", "GUEST_USER", "\"" + getGuestData()[0] + "\""
-            buildConfigField "String", "GUEST_PASSWORD", "\"" + getGuestData()[1] + "\""
-        }
         release {
-            buildConfigField "String", "GUEST_USER", "\"" + getGuestData()[0] + "\""
-            buildConfigField "String", "GUEST_PASSWORD", "\"" + getGuestData()[1] + "\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

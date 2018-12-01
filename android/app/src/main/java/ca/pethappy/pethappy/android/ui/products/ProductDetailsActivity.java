@@ -14,12 +14,12 @@ import com.squareup.picasso.Picasso;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.backend.Product;
-import ca.pethappy.pethappy.android.ui.base.BaseActivity;
+import ca.pethappy.pethappy.android.ui.base.BaseAuthenticatedActivity;
 import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 import retrofit2.Response;
 
-public class ProductDetailsActivity extends BaseActivity {
+public class ProductDetailsActivity extends BaseAuthenticatedActivity {
     public static final String EXTRA_PRODUCT_ID = "productId";
 
     // Components
@@ -66,7 +66,7 @@ public class ProductDetailsActivity extends BaseActivity {
         // Query products
         new SimpleTask<Void, Product>(
                 none -> {
-                    Response<Product> response = getApp().noSecEndpoints.productsFindById(productId).execute();
+                    Response<Product> response = getApp().endpoints.productsFindById(productId).execute();
                     if (response.isSuccessful()) {
                         return response.body();
                     }

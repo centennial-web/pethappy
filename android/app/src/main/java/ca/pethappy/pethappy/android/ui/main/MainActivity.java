@@ -16,7 +16,7 @@ import java.util.List;
 
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
-import ca.pethappy.pethappy.android.ui.base.BaseActivity;
+import ca.pethappy.pethappy.android.ui.base.BaseAuthenticatedActivity;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
 import ca.pethappy.pethappy.android.ui.cart.CartFragment;
 import ca.pethappy.pethappy.android.ui.cart.CartListener;
@@ -29,7 +29,7 @@ import ca.pethappy.pethappy.android.utils.badge.QBadgeView;
 import ca.pethappy.pethappy.android.utils.navigator.BottomNavigationViewEx;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
-public class MainActivity extends BaseActivity implements OnFragmentInteractionListener,
+public class MainActivity extends BaseAuthenticatedActivity implements OnFragmentInteractionListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
         CartListener {
     private static final int OPEN_SUBSCRIPTIONS_REQUEST = 1;

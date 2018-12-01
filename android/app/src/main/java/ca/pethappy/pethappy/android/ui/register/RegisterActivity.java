@@ -210,7 +210,7 @@ public class RegisterActivity extends BaseActivity {
                         userRegistration.province = province;
                         userRegistration.buzzer = buzzer;
 
-                        Response<User> response = app.noSecEndpoints.registerUser(userRegistration).execute();
+                        Response<User> response = app.endpoints.registerUser(userRegistration).execute();
 
                         switch (response.code()) {
                             case 201:

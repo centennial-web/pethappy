@@ -537,4 +537,29 @@
         <addNotNullConstraint tableName="carts" columnName="device_id"/>
     </changeSet>
 
+    <!--Remove guest user-->
+    <changeSet id="22" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            DO $$
+            DECLARE
+                _user_id INTEGER;
+            BEGIN
+                -- Get user id
+                SELECT id
+                INTO _user_id
+                FROM public.users
+                WHERE email = 'guest@pethappy.ca';
+
+                -- Delete guest user carts
+                DELETE FROM carts WHERE user_id = _user_id;
+
+                -- Delete guest user roles
+                DELETE FROM user_roles WHERE user_id = _user_id;
+
+                -- Delete guest user
+                DELETE FROM users WHERE id = _user_id;
+            END $$;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
