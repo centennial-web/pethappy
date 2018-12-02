@@ -13,7 +13,6 @@ import java.util.Random;
 public class SmsService {
     private static final int MAX_VERIFICATION_CODE = 100000;
     private static final int MIN_VERIFICATION_CODE = 999999;
-    private static final String SENDER_PHONE_NUMBER = "+18135196023";
 
     @Value("${twilio.account-sid}")
     private String twilioAccountSid;
@@ -21,13 +20,16 @@ public class SmsService {
     @Value("${twilio.auth-token}")
     private String twilioAuthToken;
 
+    @Value("${twilio.sender-phone-number}")
+    private String twilioSenderPhoneNumber;
+
     @PostConstruct
     public void init() {
         Twilio.init(twilioAccountSid, twilioAuthToken);
     }
 
     public void sendSms(String number, String message) {
-        Message m = Message.creator(new PhoneNumber(number), new PhoneNumber(SENDER_PHONE_NUMBER), message).create();
+        Message m = Message.creator(new PhoneNumber(number), new PhoneNumber(twilioSenderPhoneNumber), message).create();
         m.getSid();
     }
 

@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,5 +34,15 @@ public class UsersController {
         }
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/api/users/{userId}/verificationCode")
+    public ResponseEntity<?> userVerificationCode(@PathVariable Long userId) {
+        try {
+            String verificationCode = usersService.findById(userId).getVerificationCode();
+            return new ResponseEntity<>(verificationCode, HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

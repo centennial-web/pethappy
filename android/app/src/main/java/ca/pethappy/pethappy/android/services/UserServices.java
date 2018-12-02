@@ -22,6 +22,15 @@ public class UserServices {
         throw new IOException("Couldn't find user");
     }
 
+    public UserSettings userSettings(Long userId) throws IOException {
+        Response<UserSettings> response = app.endpoints.userSettings(userId).execute();
+        UserSettings body;
+        if (response.isSuccessful() && (body = response.body()) != null) {
+            return body;
+        }
+        throw new IOException("Couldn't find user");
+    }
+
     public Boolean updateSettings(UserSettings userSettings) throws IOException {
         Response<Boolean> response = app.endpoints.updateSettings(userSettings).execute();
         Boolean body;

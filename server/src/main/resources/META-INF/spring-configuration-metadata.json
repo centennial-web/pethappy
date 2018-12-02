@@ -40,6 +40,10 @@
     {
       "name": "twilio.auth-token",
       "type": "java.lang.String"
+    },
+    {
+      "name": "twilio.sender-phone-number",
+      "type": "java.lang.String"
     }
   ]
 }

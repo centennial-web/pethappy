@@ -7,22 +7,28 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.Group;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
+import ca.pethappy.pethappy.android.App;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.consts.Consts;
-import ca.pethappy.pethappy.android.utils.task.SimpleTask;
+import ca.pethappy.pethappy.android.models.forms.UserSettings;
 import ca.pethappy.pethappy.android.ui.base.BaseActivity;
 import ca.pethappy.pethappy.android.ui.register.RegisterActivity;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -118,32 +124,100 @@ public class LoginActivity extends BaseActivity {
             // perform the user login attempt.
             showProgress(true);
 
-            new SimpleTask<Void, String>(
+            App app = getApp();
+
+            new SimpleTask<Void, LoginReturn>(
                     none -> {
                         // Create basic auth credentials = base64(user : password)
                         String credentials = Credentials.basic(email, password, Charset.forName("UTF-8"));
-                        Request request = new Request
-                                .Builder()
+                        Request request = new Request.Builder()
                                 .header("Authorization", credentials)
                                 .url(Consts.SERVER_URL + "/api/login")
-                                .get()
-                                .build();
-                        Response response = okHttpClient.newCall(request).execute();
-                        if (response.isSuccessful()) {
-                            try (ResponseBody body = response.body()) {
-                                if (body != null) {
-                                    return body.string();
-                                }
+                                .get().build();
+
+                        // Execute request
+                        try (Response response = okHttpClient.newCall(request).execute()) {
+                            ResponseBody body;
+                            if (response.isSuccessful() && (body = response.body()) != null) {
+                                String token = body.string();
+                                return new LoginReturn(token, isUsing2FA(token));
                             }
                         }
                         return null;
                     },
-                    token -> {
+                    loginReturn -> {
                         showProgress(false);
-                        if (token != null) {
-                            getApp().setLocalUserToken(token);
-                            setResult(RESULT_OK);
-                            finish();
+
+                        // User logged successfully
+                        if (loginReturn != null && loginReturn.token != null) {
+                            // 2FA
+                            if (loginReturn.use2fa) {
+                                // Component layout
+                                final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                layoutParams.setMargins(20, 0, 20, 0);
+                                final EditText input = new EditText(LoginActivity.this);
+                                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                input.setMaxLines(1);
+                                input.setLayoutParams(layoutParams);
+
+                                // Dialog
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                builder.setView(input);
+                                builder.setTitle("Enter your confirmation code");
+                                builder.setCancelable(false);
+                                builder.setIcon(R.drawable.ic_sms_green_24dp);
+
+                                // Confirm click
+                                builder.setPositiveButton("Confirm", (dialog, which) -> {
+                                    String userCode = input.getText().toString(); // get code inserted by the user
+
+                                    // Code is empty
+                                    if (TextUtils.isEmpty(userCode)) {
+                                        Toast.makeText(LoginActivity.this, "Invalid code", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
+                                    // Verify code on the server
+                                    new SimpleTask<Void, String>(
+                                            ignored -> {
+                                                // Validate
+                                                Request request = new Request.Builder()
+                                                        .header("Authorization", loginReturn.token)
+                                                        .url(Consts.SERVER_URL + "/api/users/" + app.getUserInfo(loginReturn.token).id + "/verificationCode")
+                                                        .get().build();
+
+                                                // Execute request
+                                                try (Response response = okHttpClient.newCall(request).execute()) {
+                                                    ResponseBody body;
+                                                    if (response.isSuccessful() && (body = response.body()) != null) {
+                                                        return body.string();
+                                                    }
+                                                }
+                                                return null;
+                                            },
+                                            serverCode -> {
+                                                if (serverCode.equalsIgnoreCase(userCode)) {
+                                                    getApp().setLocalUserToken(loginReturn.token);
+                                                    setResult(RESULT_OK);
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(LoginActivity.this, "Invalid code", Toast.LENGTH_SHORT).show();
+                                                }
+                                            },
+                                            error -> Toast.makeText(LoginActivity.this, "Error checking code. Details: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+                                    ).execute((Void) null);
+                                });
+                                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                                AlertDialog dialog = builder.create();
+                                input.requestFocus();
+                                dialog.show();
+                            } else {
+                                getApp().setLocalUserToken(loginReturn.token);
+                                setResult(RESULT_OK);
+                                finish();
+                            }
                         } else {
                             setResult(RESULT_CANCELED);
                             passwordTxt.setError(getString(R.string.error_incorrect_password));
@@ -155,6 +229,38 @@ public class LoginActivity extends BaseActivity {
                         showProgress(false);
                     }
             ).execute((Void) null);
+        }
+    }
+
+    private boolean isUsing2FA(String token) throws IOException {
+        App app = LoginActivity.this.getApp();
+        Long userId = app.getUserInfo(token).id;
+
+        Request request = new Request.Builder()
+                .header("Authorization", token)
+                .url(Consts.SERVER_URL + "/api/settings/" + userId)
+                .get().build();
+
+        // Execute request
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            ResponseBody body;
+            if (response.isSuccessful() && (body = response.body()) != null) {
+                UserSettings userSettings = app.moshi.adapter(UserSettings.class).fromJson(body.string());
+                if (userSettings != null) {
+                    return userSettings.use2fa;
+                }
+            }
+        }
+        throw new IOException("Couldn't get user settings");
+    }
+
+    private static class LoginReturn {
+        String token;
+        boolean use2fa;
+
+        LoginReturn(String token, boolean use2fa) {
+            this.token = token;
+            this.use2fa = use2fa;
         }
     }
 

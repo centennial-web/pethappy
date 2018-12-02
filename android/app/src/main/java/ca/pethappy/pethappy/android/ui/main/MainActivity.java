@@ -103,8 +103,13 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
+                // Clear user store data
                 getApp().logoutUser();
-                Toast.makeText(this, "Log out successfully", Toast.LENGTH_SHORT).show();
+
+                // Send user to login activity
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -11,7 +11,6 @@ import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDes
 import ca.pethappy.pethappy.android.models.forms.AddCartItem;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
 import ca.pethappy.pethappy.android.models.forms.UserSettings;
-import ca.pethappy.pethappy.android.services.UserServices;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

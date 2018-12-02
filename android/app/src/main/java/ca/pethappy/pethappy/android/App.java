@@ -46,10 +46,10 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        LeakCanary.install(this);
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return;
+//        }
+//        LeakCanary.install(this);
 
         // Services
         this.cartServices = new CartServices(this);
@@ -71,10 +71,14 @@ public class App extends Application {
                 .writeTimeout(10, TimeUnit.MINUTES)
                 .readTimeout(10, TimeUnit.MINUTES)
                 .addInterceptor(chain -> {
-                    Request newRequest = chain.request().newBuilder()
-                            .addHeader("Authorization", getLocalUserToken())
-                            .build();
-                    return chain.proceed(newRequest);
+                    String token;
+                    if ((token = getLocalUserToken()) != null) {
+                        Request newRequest = chain.request().newBuilder()
+                                .addHeader("Authorization", token)
+                                .build();
+                        return chain.proceed(newRequest);
+                    }
+                    return chain.proceed(chain.request());
                 })
                 .build();
 
@@ -126,12 +130,7 @@ public class App extends Application {
         return deviceId;
     }
 
-    public DecodedToken getUserInfo() {
-        String token = getLocalUserToken();
-        if (token == null) {
-            return null;
-        }
-
+    public DecodedToken getUserInfo(String token) {
         // Decode
         DecodedJWT decodedJWT = JWT.decode(token);
 
@@ -148,5 +147,13 @@ public class App extends Application {
         decodedToken.roles = decodedJWT.getClaim("roles").asList(String.class);
 
         return decodedToken;
+    }
+
+    public DecodedToken getUserInfo() {
+        String token = getLocalUserToken();
+        if (token == null) {
+            return null;
+        }
+        return getUserInfo(token);
     }
 }

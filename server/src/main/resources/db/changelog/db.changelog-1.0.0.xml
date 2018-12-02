@@ -575,4 +575,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="24" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            UPDATE users SET cell_phone = '+1' || cell_phone;
+        </sql>
+    </changeSet>
+
+    <changeSet id="25" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            UPDATE users SET cell_phone = '4168939698' WHERE email='rodgarcialima@gmail.com';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

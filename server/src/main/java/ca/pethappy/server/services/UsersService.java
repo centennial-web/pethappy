@@ -15,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsersService {
     private final UsersRepository usersRepository;
     private final RolesRepository rolesRepository;
+    private final SmsService smsService;
 
     @Autowired
-    public UsersService(UsersRepository usersRepository, RolesRepository rolesRepository) {
+    public UsersService(UsersRepository usersRepository, RolesRepository rolesRepository, SmsService smsService) {
         this.usersRepository = usersRepository;
         this.rolesRepository = rolesRepository;
+        this.smsService = smsService;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -71,6 +73,19 @@ public class UsersService {
 
         // Update user
         user.setUse2fa(userSettings.isUse2fa());
-        usersRepository.save(user);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void handle2FA(String email) {
+        User user = findByEmail(email);
+
+        // Uses 2FA?
+        if (user.isUse2fa()) {
+            String confirmationCode = smsService.generateVerificationCode();
+            user.setVerificationCode(confirmationCode);
+            user.setConfirmed(false);
+
+            smsService.sendSms(user.getCellPhone(), "Your confirmation code is " + confirmationCode);
+        }
     }
 }

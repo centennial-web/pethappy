@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:checked="false"
         android:showText="false"
-        android:text="Use Two Factor Authentication (2FA)"
+        android:text="Enable Two Factor Authentication (2FA)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
