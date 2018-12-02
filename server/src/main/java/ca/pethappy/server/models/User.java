@@ -23,6 +23,9 @@ public class User {
     private String province;
     private String buzzer;
     private Set<Role> roles;
+    private boolean use2fa;
+    private String verificationCode;
+    private boolean confirmed;
 
     public User() {
         roles = new HashSet<>();
@@ -158,5 +161,32 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Column(name = "use2fa", nullable = false)
+    public boolean isUse2fa() {
+        return use2fa;
+    }
+
+    public void setUse2fa(boolean use2fa) {
+        this.use2fa = use2fa;
+    }
+
+    @Column(name = "verification_code")
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    @Column(name = "confirmed", nullable = false)
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 }

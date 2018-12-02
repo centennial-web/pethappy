@@ -32,6 +32,14 @@
     {
       "name": "cors.max-age",
       "type": "java.lang.Long"
+    },
+    {
+      "name": "twilio.account-sid",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "twilio.auth-token",
+      "type": "java.lang.String"
     }
   ]
 }

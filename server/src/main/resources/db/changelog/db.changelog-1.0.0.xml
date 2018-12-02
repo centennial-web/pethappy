@@ -562,4 +562,17 @@
         </sql>
     </changeSet>
 
+    <!--2 Factor Authentication-->
+    <changeSet id="23" author="rodrigo">
+        <addColumn tableName="users">
+            <column name="use2fa" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="verification_code" type="text" />
+            <column name="confirmed" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
