@@ -22,6 +22,7 @@ import ca.pethappy.pethappy.android.ui.cart.CartFragment;
 import ca.pethappy.pethappy.android.ui.cart.CartListener;
 import ca.pethappy.pethappy.android.ui.login.LoginActivity;
 import ca.pethappy.pethappy.android.ui.products.ProductFragment;
+import ca.pethappy.pethappy.android.ui.profile.ProfileFragment;
 import ca.pethappy.pethappy.android.ui.settings.SettingsFragment;
 import ca.pethappy.pethappy.android.ui.subscriptions.SubscriptionsFragment;
 import ca.pethappy.pethappy.android.utils.badge.Badge;
@@ -43,6 +44,7 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
     private SubscriptionsFragment subscriptionsFragment;
     private CartFragment cartFragment;
     private SettingsFragment settingsFragment;
+    private ProfileFragment profileFragment;
 
     // Bottom navigation
     private BottomNavigationViewEx navigation;
@@ -64,18 +66,20 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
         subscriptionsFragment = new SubscriptionsFragment();
         cartFragment = new CartFragment();
         settingsFragment = new SettingsFragment();
+        profileFragment = new ProfileFragment();
 
         // Navigation
         navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(this);
-        navigation.enableAnimation(true);
+        navigation.enableAnimation(false);
+        navigation.setItemHorizontalTranslationEnabled(false);
 
         // Badge
         badge = new QBadgeView(this)
                 .setBadgeNumber(0)
-                .setGravityOffset(25, 2, true)
+                .setGravityOffset(15, 2, true)
                 .setShowShadow(true)
-                .bindTarget(navigation.getBottomNavigationItemView(2));
+                .bindTarget(navigation.getBottomNavigationItemView(1));
         new SimpleTask<Void, Integer>(
                 ignored -> getApp().cartServices.cartItemQuantity(),
                 itemQuantity -> badge.setBadgeNumber(itemQuantity),
@@ -89,12 +93,6 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
         super.onResume();
 
         openFragment(activeFragmentId);
-//
-//        // Set products as default fragment
-//        fragmentManager
-//                .beginTransaction()
-//                .replace(R.id.fragmentContainer, productFragment)
-//                .commit();
     }
 
     @Override
@@ -128,16 +126,22 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
                         .replace(R.id.fragmentContainer, productFragment)
                         .commit();
                 return true;
+            case R.id.navigation_cart:
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, cartFragment)
+                        .commit();
+                return true;
             case R.id.navigation_subscriptions:
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.fragmentContainer, subscriptionsFragment)
                         .commit();
                 return true;
-            case R.id.navigation_cart:
+            case R.id.navigation_profile:
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.fragmentContainer, cartFragment)
+                        .replace(R.id.fragmentContainer, profileFragment)
                         .commit();
                 return true;
             case R.id.navigation_settings:

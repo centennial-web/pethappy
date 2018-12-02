@@ -21,4 +21,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:checked="true"
         tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Adds an extra step to your log-in procedure. Without 2FA, you enter in your email and password, and then you're done. The password is your single factor of authentication. The second factor makes your account more secure."
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/use2faSwitch" />
 </android.support.constraint.ConstraintLayout>

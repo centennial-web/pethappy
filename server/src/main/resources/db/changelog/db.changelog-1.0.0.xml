@@ -586,4 +586,57 @@
             UPDATE users SET cell_phone = '4168939698' WHERE email='rodgarcialima@gmail.com';
         </sql>
     </changeSet>
+
+    <changeSet id="26" author="rodrigo">
+        <createTable tableName="cards">
+            <column name="id" type="bigserial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_cards" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number" type="text">
+                <constraints nullable="false" unique="true" uniqueConstraintName="unq_cards_number" />
+            </column>
+            <column name="exp_month" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="exp_year" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="name_on_card" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="cvv" type="integer">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="cards" baseColumnNames="user_id" constraintName="fk_cardds_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" onUpdate="CASCADE" onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="27" author="rodrigo">
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            DO $$
+            DECLARE
+                _user_id INTEGER;
+            BEGIN
+                -- Get user id
+                SELECT id
+                INTO _user_id
+                FROM public.users
+                WHERE email = 'rodgarcialima@gmail.com';
+
+                -- Add cards
+                INSERT INTO cards (id, user_id, number, exp_month, exp_year, name_on_card, cvv) VALUES
+                    (default, _user_id, '4716626187972772', 12, 2023, 'Rodrigo G. Lima', 443);
+                INSERT INTO cards (id, user_id, number, exp_month, exp_year, name_on_card, cvv) VALUES
+                    (default, _user_id, '5329963080434923', 2, 2029, 'Rodrigo Garcia Lima', 192);
+                INSERT INTO cards (id, user_id, number, exp_month, exp_year, name_on_card, cvv) VALUES
+                    (default, _user_id, '371449635398431', 7, 2025, 'Rodrigo Lima', 981);
+            END $$;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

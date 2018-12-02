@@ -2,6 +2,7 @@ package ca.pethappy.server.api;
 
 import ca.pethappy.server.forms.UserRegistration;
 import ca.pethappy.server.models.User;
+import ca.pethappy.server.services.CardsService;
 import ca.pethappy.server.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,12 @@ import javax.validation.Valid;
 @RestController
 public class UsersController {
     private final UsersService usersService;
+    private final CardsService cardsService;
 
     @Autowired
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, CardsService cardsService) {
         this.usersService = usersService;
+        this.cardsService = cardsService;
     }
 
     @PostMapping("/api/register")
@@ -41,6 +44,24 @@ public class UsersController {
         try {
             String verificationCode = usersService.findById(userId).getVerificationCode();
             return new ResponseEntity<>(verificationCode, HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/api/users/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable Long userId) {
+        try {
+            return new ResponseEntity<>(usersService.findById(userId), HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/api/users/cards/{userId}")
+    public ResponseEntity<?> getUserCards(@PathVariable Long userId) {
+        try {
+            return new ResponseEntity<>(cardsService.getUserCardsForMobile(userId), HttpStatus.OK);
         } catch (Throwable t) {
             return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
         }

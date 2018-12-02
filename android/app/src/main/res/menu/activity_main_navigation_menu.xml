@@ -6,14 +6,19 @@
         android:title="@string/title_products" />
 
     <item
+        android:id="@+id/navigation_cart"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"
+        android:title="@string/title_cart" />
+
+    <item
         android:id="@+id/navigation_subscriptions"
         android:icon="@drawable/ic_update_black_24dp"
         android:title="@string/title_subscriptions" />
 
     <item
-        android:id="@+id/navigation_cart"
-        android:icon="@drawable/ic_shopping_cart_black_24dp"
-        android:title="@string/title_cart" />
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/title_profile" />
 
     <item
         android:id="@+id/navigation_settings"

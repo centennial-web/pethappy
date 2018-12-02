@@ -3,7 +3,9 @@ package ca.pethappy.server.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,9 +28,11 @@ public class User {
     private boolean use2fa;
     private String verificationCode;
     private boolean confirmed;
+    private List<Card> cards;
 
     public User() {
         roles = new HashSet<>();
+        cards = new ArrayList<>();
     }
 
     @Id
@@ -188,5 +192,15 @@ public class User {
 
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 }

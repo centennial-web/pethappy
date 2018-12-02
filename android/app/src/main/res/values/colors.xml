@@ -11,9 +11,10 @@
 
     <color name="greenColor">#669900</color>
     <color name="grayColor">#ECEFF1</color>
+    <color name="lightGrayColor">#7d7e7e</color>
 
     <!--Transparency-->
-    <color name="grayColor_100">#FF000000</color>
+    <color name="grayColor_100">#000000</color>
     <color name="grayColor_95">#F2000000</color>
     <color name="grayColor_90">#E6000000</color>
     <color name="grayColor_85">#D9000000</color>

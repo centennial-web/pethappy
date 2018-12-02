@@ -44,6 +44,10 @@
     {
       "name": "twilio.sender-phone-number",
       "type": "java.lang.String"
+    },
+    {
+      "name": "cards.key",
+      "type": "java.lang.String"
     }
   ]
 }

@@ -1,8 +1,11 @@
 package ca.pethappy.pethappy.android.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
+import ca.pethappy.pethappy.android.models.User;
+import ca.pethappy.pethappy.android.models.backend.Card;
 import ca.pethappy.pethappy.android.models.forms.UserSettings;
 import retrofit2.Response;
 
@@ -38,5 +41,23 @@ public class UserServices {
             return body;
         }
         throw new IOException("Couldn't update settings");
+    }
+
+    public User getUser() throws IOException {
+        Response<User> response = app.endpoints.getUser(app.getUserInfo().id).execute();
+        User body;
+        if (response.isSuccessful() && (body = response.body()) != null) {
+            return body;
+        }
+        throw new IOException("Couldn't find user");
+    }
+
+    public List<Card> getUserCards() throws IOException {
+        Response<List<Card>> response = app.endpoints.getUserCards(app.getUserInfo().id).execute();
+        List<Card> body;
+        if (response.isSuccessful() && (body = response.body()) != null) {
+            return body;
+        }
+        throw new IOException("Couldn't find user");
     }
 }

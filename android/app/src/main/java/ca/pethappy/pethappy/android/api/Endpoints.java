@@ -5,6 +5,7 @@ import java.util.List;
 import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.ApiUser;
 import ca.pethappy.pethappy.android.models.User;
+import ca.pethappy.pethappy.android.models.backend.Card;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
@@ -58,4 +59,10 @@ public interface Endpoints {
 
     @PUT("/api/settings")
     Call<Boolean> updateSettings(@Body UserSettings userSettings);
+
+    @GET("/api/users/{userId}")
+    Call<User> getUser(@Path("userId") Long userId);
+
+    @GET("/api/users/cards/{userId}")
+    Call<List<Card>> getUserCards(@Path("userId") Long userId);
 }

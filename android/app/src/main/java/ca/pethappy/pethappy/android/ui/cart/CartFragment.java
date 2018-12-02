@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,9 @@ import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 public class CartFragment extends BaseFragment {
     private CartListener cartListener;
     private CartAdapter cartAdapter;
+
+    // Components
+    private Button checkoutBtn;
 
     public CartFragment() {
         // Required empty public constructor
@@ -119,6 +123,12 @@ public class CartFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(cartAdapter);
 
+        checkoutBtn = rootView.findViewById(R.id.checkoutBtn);
+        checkoutBtn.setOnClickListener(v -> {
+            Intent checkoutIntent = new Intent(getContext(), CheckoutActivity.class);
+            startActivity(checkoutIntent);
+        });
+
         // Query products
         new SimpleTask<Void, List<CartItem>>(
                 none -> getApp().cartServices.listItems(),
@@ -156,6 +166,19 @@ public class CartFragment extends BaseFragment {
 
         // Show the result
         totalTxt.setText(quantity + " / CDN$ " + NumberFormatter.getInstance().formatNumber2(total));
+
+        // Checkout button and total labels
+        if (cartItems.size() > 0) {
+            checkoutBtn.setEnabled(true);
+            int enabledColor = getResources().getColor(R.color.accentColor);
+            checkoutBtn.setTextColor(enabledColor);
+            totalTxt.setTextColor(enabledColor);
+        } else {
+            int disabledColor = getResources().getColor(R.color.grayColor_10);
+            checkoutBtn.setEnabled(false);
+            checkoutBtn.setTextColor(disabledColor);
+            totalTxt.setTextColor(disabledColor);
+        }
     }
 
     @Override
