@@ -1,6 +1,7 @@
 package ca.pethappy.server.services;
 
 import ca.pethappy.server.consts.Consts;
+import ca.pethappy.server.forms.UserSettings;
 import ca.pethappy.server.models.Role;
 import ca.pethappy.server.models.User;
 import ca.pethappy.server.repositories.RolesRepository;
@@ -43,8 +44,33 @@ public class UsersService {
                 throw new RuntimeException("ROLE_USER couldn't be found on the database");
             }
         }
-
         // Save
         return usersRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public UserSettings getUserSettings(Long userId) {
+        User user = findById(userId);
+
+        // Create user settings
+        UserSettings userSettings = new UserSettings();
+        userSettings.setId(userId);
+        userSettings.setUse2fa(user.isUse2fa());
+
+        return userSettings;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUserSettings(UserSettings userSettings) {
+        User user = findById(userSettings.getId());
+
+        // Update user
+        user.setUse2fa(userSettings.isUse2fa());
+        usersRepository.save(user);
     }
 }

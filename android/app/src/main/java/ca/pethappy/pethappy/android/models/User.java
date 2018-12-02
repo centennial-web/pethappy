@@ -14,4 +14,7 @@ public class User {
     public String city;
     public String province;
     public String buzzer;
+    public boolean use2fa;
+    public String verificationCode;
+    public boolean confirmed;
 }

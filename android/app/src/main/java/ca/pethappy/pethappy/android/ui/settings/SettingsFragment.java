@@ -3,14 +3,20 @@ package ca.pethappy.pethappy.android.ui.settings;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
+import android.widget.Toast;
 
+import ca.pethappy.pethappy.android.App;
 import ca.pethappy.pethappy.android.R;
+import ca.pethappy.pethappy.android.models.forms.UserSettings;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.base.fragments.OnFragmentInteractionListener;
+import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +37,9 @@ public class SettingsFragment extends BaseFragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    // Components
+    private Switch use2faSwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -64,10 +73,50 @@ public class SettingsFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        // Components
+        use2faSwitch = rootView.findViewById(R.id.use2faSwitch);
+        use2faSwitch.setOnClickListener(v -> saveSettings());
+
+        // Load settings and update user interface
+        loadUserSettings();
+
+        return rootView;
+    }
+
+    private void loadUserSettings() {
+        // Get App for the tasks (you shoudn't get inside the tasks)
+        App app = getApp();
+
+        new SimpleTask<Void, UserSettings>(
+                ignored -> app.userServices.userSettings(),
+                userSettings -> {
+                    // Update components
+                    use2faSwitch.setChecked(userSettings.use2fa);
+                },
+                error -> Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        ).execute((Void) null);
+    }
+
+    private void saveSettings() {
+        // Get App for the tasks (you shoudn't get inside the tasks)
+        App app = getApp();
+
+        // Create user setting object
+        UserSettings userSettings = new UserSettings();
+        userSettings.id = app.getUserInfo().id;
+        userSettings.use2fa = use2faSwitch.isChecked();
+
+        // Save
+        new SimpleTask<Void, Boolean>(
+                ignored -> app.userServices.updateSettings(userSettings),
+                ignored -> {},
+                error -> Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        ).execute((Void) null);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

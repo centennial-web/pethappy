@@ -10,11 +10,14 @@ import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.models.forms.AddCartItem;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
+import ca.pethappy.pethappy.android.models.forms.UserSettings;
+import ca.pethappy.pethappy.android.services.UserServices;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -51,4 +54,9 @@ public interface Endpoints {
     @GET("/api/carts/itemQuantity")
     Call<Integer> cartItemQuantity(@Query("deviceId") String deviceId, @Query("userId") Long userId);
 
+    @GET("/api/settings/{userId}")
+    Call<UserSettings> userSettings(@Path("userId") Long userId);
+
+    @PUT("/api/settings")
+    Call<Boolean> updateSettings(@Body UserSettings userSettings);
 }

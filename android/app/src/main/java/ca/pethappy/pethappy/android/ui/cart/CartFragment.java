@@ -54,7 +54,7 @@ public class CartFragment extends BaseFragment {
             @Override
             public void onPlusClick(CartItem cartItem, CartAdapter.ViewHolder viewHolder) {
                 viewHolder.minusBtn.setEnabled(false);
-                
+
                 // Add item
                 new SimpleTask<Void, List<CartItem>>(
                         ignored -> getApp().cartServices.addItemToCart(cartItem.product.id)

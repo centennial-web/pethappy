@@ -36,6 +36,5 @@ public class UsersController {
         }
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
-//        return usersService.registerUser(user);
     }
 }
