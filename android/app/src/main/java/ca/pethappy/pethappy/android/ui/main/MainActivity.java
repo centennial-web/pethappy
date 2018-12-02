@@ -35,6 +35,8 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
     private static final int OPEN_SUBSCRIPTIONS_REQUEST = 1;
     private static final int OPEN_SETTINGS_REQUEST = 2;
 
+    private int activeFragmentId = R.id.navigation_products;
+
     // Fragments
     private FragmentManager fragmentManager;
     private ProductFragment productFragment;
@@ -86,11 +88,13 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
     protected void onResume() {
         super.onResume();
 
-        // Set products as default fragment
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, productFragment)
-                .commit();
+        openFragment(activeFragmentId);
+//
+//        // Set products as default fragment
+//        fragmentManager
+//                .beginTransaction()
+//                .replace(R.id.fragmentContainer, productFragment)
+//                .commit();
     }
 
     @Override
@@ -116,9 +120,8 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
+    private boolean openFragment(int menuId) {
+        switch (menuId) {
             case R.id.navigation_products:
                 fragmentManager
                         .beginTransaction()
@@ -126,16 +129,11 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
                         .commit();
                 return true;
             case R.id.navigation_subscriptions:
-                if (getApp().userIsNotLogged()) {
-                    startActivityForResult(new Intent(this, LoginActivity.class), OPEN_SUBSCRIPTIONS_REQUEST);
-                    return false;
-                } else {
-                    fragmentManager
-                            .beginTransaction()
-                            .replace(R.id.fragmentContainer, subscriptionsFragment)
-                            .commit();
-                    return true;
-                }
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, subscriptionsFragment)
+                        .commit();
+                return true;
             case R.id.navigation_cart:
                 fragmentManager
                         .beginTransaction()
@@ -143,18 +141,20 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
                         .commit();
                 return true;
             case R.id.navigation_settings:
-                if (getApp().userIsNotLogged()) {
-                    startActivityForResult(new Intent(this, LoginActivity.class), OPEN_SETTINGS_REQUEST);
-                    return false;
-                } else {
-                    fragmentManager
-                            .beginTransaction()
-                            .replace(R.id.fragmentContainer, settingsFragment)
-                            .commit();
-                    return true;
-                }
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, settingsFragment)
+                        .commit();
+                return true;
         }
         return false;
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        activeFragmentId = menuItem.getItemId();
+        return openFragment(activeFragmentId);
     }
 
     @Override
