@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 public class ProductsController {
     private final ProductsService productsService;
@@ -36,15 +34,13 @@ public class ProductsController {
         return new ResponseEntity<>(productsService.findAllWithoutDescription(pageable), HttpStatus.OK);
     }
 
-    @SuppressWarnings("OptionalIsPresent")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/api/products/findById/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<Product> product = productsService.findById(id);
-        if (product.isPresent()) {
-            return new ResponseEntity<>(product.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        try {
+            return new ResponseEntity<>(productsService.findById(id), HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

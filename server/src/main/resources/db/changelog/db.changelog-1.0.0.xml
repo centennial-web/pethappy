@@ -639,4 +639,83 @@
         </sql>
     </changeSet>
 
+    <changeSet id="28" author="rodrigo">
+        <createTable tableName="subscriptions">
+            <column name="id" type="bigserial">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="timestamp without time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delivery_every" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preferred_day" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="card_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_before_tax" type="numeric(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="taxes_percent" type="numeric(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="taxes_value" type="numeric(18,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="total" type="numeric(18,2)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="subscriptions" columnNames="id" constraintName="pk_subscriptions" />
+        <addForeignKeyConstraint baseTableName="subscriptions" baseColumnNames="customer_id"
+                                 constraintName="fk_subscriptions_users"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE" />
+        <addForeignKeyConstraint baseTableName="subscriptions" baseColumnNames="card_id"
+                                 constraintName="fk_subscriptions_cards"
+                                 referencedTableName="cards"
+                                 referencedColumnNames="id" onUpdate="CASCADE" onDelete="CASCADE" />
+    </changeSet>
+
+    <changeSet id="29" author="rodrigo">
+        <addDefaultValue tableName="subscriptions" columnName="total_before_tax" defaultValueNumeric="0" />
+        <addDefaultValue tableName="subscriptions" columnName="taxes_percent" defaultValueNumeric="0" />
+        <addDefaultValue tableName="subscriptions" columnName="taxes_value" defaultValueNumeric="0" />
+        <addDefaultValue tableName="subscriptions" columnName="total" defaultValueNumeric="0" />
+        <createTable tableName="subscription_items">
+            <column name="id" type="bigserial">
+                <constraints nullable="false" primaryKeyName="pk_subscription_items" primaryKey="true" />
+            </column>
+            <column name="subscription_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="subscription_items" baseColumnNames="subscription_id"
+                                 constraintName="fk_subscription_items_subscriptions"
+                                 referencedTableName="subscriptions"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="subscription_items" baseColumnNames="product_id"
+                                 constraintName="fk_subscription_items_products"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+    </changeSet>
+
 </databaseChangeLog>

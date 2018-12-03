@@ -12,7 +12,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textSize="7pt"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
@@ -42,7 +42,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="6pt"
+        android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
@@ -56,7 +56,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="6pt"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
         app:layout_constraintTop_toBottomOf="@+id/manufacturerTxt"
@@ -69,7 +69,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/holo_green_dark"
-        android:textSize="6pt"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
         app:layout_constraintTop_toBottomOf="@+id/categoryTxt"
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textColor="@android:color/holo_blue_dark"
-        android:textSize="7pt"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
         app:layout_constraintTop_toBottomOf="@+id/ingredientTxt"
         tools:text="weightKgTxt" />
@@ -93,7 +93,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="7pt"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/weightKgTxt"
         app:layout_constraintTop_toBottomOf="@+id/ingredientTxt"
@@ -113,7 +113,7 @@
         app:layout_constraintEnd_toStartOf="@+id/plusBtn"
         app:layout_constraintStart_toEndOf="@+id/pictureImv"
         app:layout_constraintTop_toTopOf="@+id/plusBtn"
-        tools:text="Quantity: 4" />
+        tools:text="Qty: 4" />
 
     <Button
         android:id="@+id/plusBtn"

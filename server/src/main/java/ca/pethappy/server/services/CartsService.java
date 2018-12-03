@@ -142,4 +142,9 @@ public class CartsService {
             return newCart;
         });
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteCartsByUserId(Long userId) {
+        cartsRepository.deleteCartsByUserId(userId);
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -171,12 +172,14 @@ public class CartFragment extends BaseFragment {
         if (cartItems.size() > 0) {
             checkoutBtn.setEnabled(true);
             int enabledColor = getResources().getColor(R.color.accentColor);
-            checkoutBtn.setTextColor(enabledColor);
+            checkoutBtn.setTextColor(getResources().getColor(android.R.color.white));
+            checkoutBtn.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.accentColor));
             totalTxt.setTextColor(enabledColor);
         } else {
             int disabledColor = getResources().getColor(R.color.grayColor_10);
             checkoutBtn.setEnabled(false);
             checkoutBtn.setTextColor(disabledColor);
+            checkoutBtn.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.grayColor_10));
             totalTxt.setTextColor(disabledColor);
         }
     }

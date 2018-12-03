@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class ProductsService {
     private final ProductsRepository productsRepository;
@@ -31,7 +29,7 @@ public class ProductsService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Product> findById(Long id) {
-        return productsRepository.findById(id);
+    public Product findById(Long id) {
+        return productsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
     }
 }

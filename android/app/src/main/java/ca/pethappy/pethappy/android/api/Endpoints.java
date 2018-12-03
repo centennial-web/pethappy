@@ -10,6 +10,7 @@ import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.Product;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.models.forms.AddCartItem;
+import ca.pethappy.pethappy.android.models.forms.SubscriptionForm;
 import ca.pethappy.pethappy.android.models.forms.UserRegistration;
 import ca.pethappy.pethappy.android.models.forms.UserSettings;
 import retrofit2.Call;
@@ -65,4 +66,7 @@ public interface Endpoints {
 
     @GET("/api/users/cards/{userId}")
     Call<List<Card>> getUserCards(@Path("userId") Long userId);
+
+    @POST("/api/subscriptions/new")
+    Call<Boolean> newSubscription(@Body SubscriptionForm subscriptionForm);
 }

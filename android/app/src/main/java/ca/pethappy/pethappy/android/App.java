@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.squareup.leakcanary.LeakCanary;
 import com.squareup.moshi.Moshi;
 
 import java.math.BigDecimal;
@@ -18,6 +17,7 @@ import ca.pethappy.pethappy.android.api.Endpoints;
 import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.DecodedToken;
 import ca.pethappy.pethappy.android.services.CartServices;
+import ca.pethappy.pethappy.android.services.SubscriptionService;
 import ca.pethappy.pethappy.android.services.UserServices;
 import ca.pethappy.pethappy.android.utils.moshi.BigDecimalAdapter;
 import ca.pethappy.pethappy.android.utils.moshi.LongAdapter;
@@ -38,6 +38,7 @@ public class App extends Application {
     // Services
     public CartServices cartServices;
     public UserServices userServices;
+    public SubscriptionService subscriptionService;
 
     // Json
     public Moshi moshi;
@@ -54,6 +55,7 @@ public class App extends Application {
         // Services
         this.cartServices = new CartServices(this);
         this.userServices = new UserServices(this);
+        this.subscriptionService = new SubscriptionService(this);
 
         // Prefs
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
