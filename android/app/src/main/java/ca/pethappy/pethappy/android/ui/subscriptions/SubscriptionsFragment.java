@@ -1,6 +1,7 @@
 package ca.pethappy.pethappy.android.ui.subscriptions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -47,9 +48,9 @@ public class SubscriptionsFragment extends BaseFragment {
 
         // AdaptergetPackageName
         adapter = new SubscriptionAdapter(getApp(), (subscription, cardView) -> {
-//                Intent Intent = new Intent(getContext(), ProductDetailsActivity.class);
-//                Intent.putExtra(ProductDetailsActivity.EXTRA_PRODUCT_ID, subscription.id);
-//                startActivity(Intent);
+            Intent Intent = new Intent(getContext(), SubscriptionDetailsActivity.class);
+            Intent.putExtra(SubscriptionDetailsActivity.EXTRA_SUBSCRIPTION_ID, subscription.id);
+            startActivity(Intent);
         });
 
         // Recycler view

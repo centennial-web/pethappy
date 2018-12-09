@@ -26,10 +26,19 @@ public class SubscriptionsController {
         }
     }
 
-    @GetMapping("/api/subscriptions/{userId}")
+    @GetMapping("/api/subscriptions/listing/{userId}")
     public ResponseEntity<?> subscriptions(@PathVariable Long userId) {
         try {
             return new ResponseEntity<>(subscriptionsService.subscriptions(userId), HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/api/subscriptions/details/{id}")
+    public ResponseEntity<?> subscription(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(subscriptionsService.findSubscriptionForDetailsById(id), HttpStatus.OK);
         } catch (Throwable t) {
             return new ResponseEntity<>(t.getMessage(), HttpStatus.BAD_REQUEST);
         }

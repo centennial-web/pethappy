@@ -4,6 +4,7 @@ import ca.pethappy.server.forms.SubscriptionForm;
 import ca.pethappy.server.forms.SubscriptionItemForm;
 import ca.pethappy.server.models.*;
 import ca.pethappy.server.repositories.SubscriptionsRepository;
+import ca.pethappy.server.repositories.projections.SubscriptionForDetails;
 import ca.pethappy.server.repositories.projections.SubscriptionForListing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,11 @@ public class SubscriptionsService {
         this.cardsService = cardsService;
         this.productsService = productsService;
         this.cartsService = cartsService;
+    }
+
+    @Transactional(readOnly = true)
+    public SubscriptionForDetails findSubscriptionForDetailsById(Long id) {
+        return subscriptionsRepository.findSubscriptionForDetailsById(id);
     }
 
     @Transactional(readOnly = true)

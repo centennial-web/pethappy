@@ -2,13 +2,14 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/cancelledLayout"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -19,15 +20,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:backgroundTint="#80000000"
             android:id="@+id/deliveryEveryTxt"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
+            android:backgroundTint="#80000000"
             android:gravity="center|bottom"
+            android:paddingBottom="2dp"
             android:textColor="@android:color/white"
             android:textSize="14sp"
-            android:paddingBottom="2dp"
             tools:text="Every 2 months" />
 
         <View
@@ -40,14 +41,14 @@
             android:background="@android:color/white" />
 
         <TextView
-            android:paddingTop="1dp"
             android:id="@+id/preferredDayTxt"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
             android:gravity="center|top"
+            android:paddingTop="1dp"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
+            android:textSize="13sp"
             tools:text="on day 19" />
     </LinearLayout>
 

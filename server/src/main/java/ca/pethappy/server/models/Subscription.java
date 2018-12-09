@@ -1,5 +1,7 @@
 package ca.pethappy.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class Subscription {
     private BigDecimal total;
     private List<SubscriptionItem> items;
     private boolean cancelled;
+    private List<Order> orders;
 
     public Subscription() {
         items = new ArrayList<>();
@@ -140,5 +143,15 @@ public class Subscription {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

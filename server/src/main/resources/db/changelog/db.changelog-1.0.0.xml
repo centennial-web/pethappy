@@ -728,4 +728,99 @@
         <addNotNullConstraint tableName="subscriptions" columnName="cancelled" />
     </changeSet>
 
+    <changeSet id="31" author="rodrigo">
+        <createTable tableName="orders">
+            <column name="id" type="bigserial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_orders" />
+            </column>
+            <column name="subscription_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="creation_date" type="timestamp without time zone" defaultValueDate="CURRENT_DATE">
+                <constraints nullable="false" />
+            </column>
+            <column name="delivery_date" type="timestamp without time zone">
+                <constraints nullable="false" />
+            </column>
+            <column name="delivered_date" type="timestamp without time zone"/>
+            <column name="first_name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="cell_phone" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="address" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="text" />
+            <column name="postal_code" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="province" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="buzzer" type="text" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="subscription_id"
+                                 constraintName="fk_orders_subscription"
+                                 referencedTableName="subscriptions"
+                                 referencedColumnNames="id" onUpdate="CASCADE" onDelete="CASCADE"/>
+        <createTable tableName="order_items">
+            <column name="id" type="bigserial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order_items"/>
+            </column>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="order_items" baseColumnNames="product_id"
+                                 constraintName="fk_order_items_product"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="32" author="rodrigo">
+        <addColumn tableName="orders">
+            <column name="total_before_tax" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="orders">
+            <column name="taxes_percent" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="orders">
+            <column name="taxes_value" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="orders">
+            <column name="total" type="numeric(18,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

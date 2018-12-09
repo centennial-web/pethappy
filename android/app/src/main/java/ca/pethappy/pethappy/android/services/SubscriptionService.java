@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
+import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForDetails;
 import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForListing;
 import ca.pethappy.pethappy.android.models.forms.SubscriptionForm;
 import retrofit2.Response;
@@ -33,4 +34,12 @@ public class SubscriptionService {
         throw new IOException("Couldn't list subscriptions");
     }
 
+    public SubscriptionForDetails subscription(Long id) throws IOException {
+        Response<SubscriptionForDetails> response = app.endpoints.subscription(id).execute();
+        SubscriptionForDetails payload;
+        if (response.isSuccessful() && (payload = response.body()) != null) {
+            return payload;
+        }
+        throw new IOException("Couldn't find subscription");
+    }
 }
