@@ -4,12 +4,14 @@ import ca.pethappy.server.forms.SubscriptionForm;
 import ca.pethappy.server.forms.SubscriptionItemForm;
 import ca.pethappy.server.models.*;
 import ca.pethappy.server.repositories.SubscriptionsRepository;
+import ca.pethappy.server.repositories.projections.SubscriptionForListing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SubscriptionsService {
@@ -30,6 +32,11 @@ public class SubscriptionsService {
         this.cardsService = cardsService;
         this.productsService = productsService;
         this.cartsService = cartsService;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubscriptionForListing> subscriptions(Long customerId) {
+        return subscriptionsRepository.findAllByCustomerId(customerId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

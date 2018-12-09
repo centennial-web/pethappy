@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -65,6 +66,7 @@ public class App extends Application {
                 .add(BigDecimal.class, new BigDecimalAdapter().nullSafe())
                 .add(UUIDAdapter.class, new UUIDAdapter().nullSafe())
                 .add(LongAdapter.class, new LongAdapter().nullSafe())
+                .add(Date.class, new Rfc3339DateJsonAdapter())
                 .build();
 
         // Okhttp

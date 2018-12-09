@@ -6,5 +6,4 @@ public class Card {
     public int expMonth;
     public int expYear;
     public String nameOnCard;
-    public int cvv;
 }

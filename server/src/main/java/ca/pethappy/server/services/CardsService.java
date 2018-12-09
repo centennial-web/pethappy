@@ -95,4 +95,8 @@ public class CardsService {
         }
         return (sum % 10 == 0);
     }
+
+    public String getCardName(Card card) {
+        return CardType.detect(card.getNumber()) + " ending in " + card.getNumber().substring(card.getNumber().length() - 4);
+    }
 }

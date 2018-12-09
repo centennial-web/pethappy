@@ -1,8 +1,10 @@
 package ca.pethappy.pethappy.android.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
+import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForListing;
 import ca.pethappy.pethappy.android.models.forms.SubscriptionForm;
 import retrofit2.Response;
 
@@ -22,5 +24,13 @@ public class SubscriptionService {
         throw new IOException("Couldn't create subscription");
     }
 
+    public List<SubscriptionForListing> subscriptions() throws IOException {
+        Response<List<SubscriptionForListing>> response = app.endpoints.subscriptions(app.getUserInfo().id).execute();
+        List<SubscriptionForListing> payload;
+        if (response.isSuccessful() && (payload = response.body()) != null) {
+            return payload;
+        }
+        throw new IOException("Couldn't list subscriptions");
+    }
 
 }

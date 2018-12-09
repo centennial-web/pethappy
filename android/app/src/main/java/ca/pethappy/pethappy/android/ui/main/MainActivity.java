@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ca.pethappy.pethappy.android.App;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.ui.base.BaseAuthenticatedActivity;
@@ -213,7 +214,13 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
 
     @Override
     public void refreshCart() {
-
+        App app = getApp();
+        new SimpleTask<Void, Integer>(
+                ignored -> app.cartServices.cartItemQuantity(),
+                this::updateBadgeNumber,
+                ignored -> {
+                }
+        ).execute((Void) null);
     }
 
     private void updateBadgeNumber(int number) {
@@ -225,15 +232,4 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
         // Update number
         badge.setBadgeNumber(number);
     }
-
-//    @Override
-//    public void onUpdateBadge(int number) {
-//        // Hide
-//        if (number <= 0) {
-//            badge.hide(true);
-//            return;
-//        }
-//        // Update number
-//        badge.setBadgeNumber(number);
-//    }
 }

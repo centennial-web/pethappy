@@ -1,5 +1,6 @@
 package ca.pethappy.pethappy.android.ui.cart;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import ca.pethappy.pethappy.android.utils.formatters.NumberFormatter;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
 public class CartFragment extends BaseFragment {
+    public static final int REQUEST_CODE_CHECKOUT = 1;
+
     private CartListener cartListener;
     private CartAdapter cartAdapter;
 
@@ -127,7 +130,8 @@ public class CartFragment extends BaseFragment {
         checkoutBtn = rootView.findViewById(R.id.checkoutBtn);
         checkoutBtn.setOnClickListener(v -> {
             Intent checkoutIntent = new Intent(getContext(), CheckoutActivity.class);
-            startActivity(checkoutIntent);
+            startActivityForResult(checkoutIntent, REQUEST_CODE_CHECKOUT);
+//            startActivity(checkoutIntent);
         });
 
         // Query products
@@ -199,5 +203,16 @@ public class CartFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         cartListener = null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_CHECKOUT && resultCode == Activity.RESULT_OK) {
+            if (cartListener != null) {
+                cartListener.refreshCart();
+            }
+        }
     }
 }

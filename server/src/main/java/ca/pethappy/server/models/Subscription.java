@@ -20,6 +20,7 @@ public class Subscription {
     private BigDecimal taxesValue;
     private BigDecimal total;
     private List<SubscriptionItem> items;
+    private boolean cancelled;
 
     public Subscription() {
         items = new ArrayList<>();
@@ -130,5 +131,14 @@ public class Subscription {
 
     public void setItems(List<SubscriptionItem> items) {
         this.items = items;
+    }
+
+    @Column(name = "cancelled", nullable = false)
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 }

@@ -7,6 +7,7 @@
     <color name="primaryTextColor">#ffffff</color>
 
     <color name="accentColor">#1d9b0a</color>
+    <color name="cancelledColor">#ce1504</color>
     <color name="backgroundColor">#ffffff</color>
 
     <color name="greenColor">#669900</color>

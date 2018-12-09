@@ -2,6 +2,7 @@ package ca.pethappy.pethappy.android.ui.cart;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -110,11 +111,10 @@ public class CheckoutActivity extends BaseAuthenticatedActivity {
                     },
                     created -> {
                         Toast.makeText(getApplicationContext(), "Subscription created", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         finish();
                     },
-                    error -> {
-                        Toast.makeText(getApplicationContext(), "Error creating subscription. Details: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                    error -> Toast.makeText(getApplicationContext(), "Error creating subscription. Details: " + error.getMessage(), Toast.LENGTH_SHORT).show()
             ).execute((Void) null);
             Toast.makeText(getApplicationContext(), "PLACE ORDER", Toast.LENGTH_SHORT).show();
         });
@@ -198,5 +198,10 @@ public class CheckoutActivity extends BaseAuthenticatedActivity {
         // Subscription total
         BigDecimal subsTotal = total.add(gstHstValue);
         subsTotalTxt.setText("CDN$ " + NumberFormatter.getInstance().formatNumber2(subsTotal));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

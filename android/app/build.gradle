@@ -26,6 +26,7 @@ ext {
     supportLibVersion = '28.0.0'
     retrofitLibVersion = '2.4.0'
     leakCanaryLibVersion = '1.6.2'
+    moshiLibVersion = '1.8.0'
 }
 
 dependencies {
@@ -38,7 +39,8 @@ dependencies {
     implementation "com.android.support:support-fragment:${supportLibVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-    implementation 'com.squareup.moshi:moshi:1.8.0'
+    implementation "com.squareup.moshi:moshi:${moshiLibVersion}"
+    implementation "com.squareup.moshi:moshi-adapters:${moshiLibVersion}"
     implementation "com.squareup.retrofit2:retrofit:${retrofitLibVersion}"
     implementation "com.squareup.retrofit2:converter-moshi:${retrofitLibVersion}"
     implementation 'com.auth0:java-jwt:3.4.1'

@@ -1,0 +1,17 @@
+package ca.pethappy.server.repositories.projections;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public interface SubscriptionForListing {
+    Long getId();
+    Date getCreationDate();
+    int getDeliveryEvery();
+    int getPreferredDay();
+    BigDecimal getTotalBeforeTax();
+    BigDecimal getTaxesPercent();
+    BigDecimal getTaxesValue();
+    BigDecimal getTotal();
+    CardForListing getCard();
+    boolean getCancelled();
+}

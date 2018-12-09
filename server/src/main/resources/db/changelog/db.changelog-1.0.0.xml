@@ -718,4 +718,14 @@
                                  referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
     </changeSet>
 
+    <changeSet id="30" author="rodrigo">
+        <addColumn tableName="subscriptions">
+            <column name="cancelled" type="boolean" defaultValueBoolean="false" />
+        </addColumn>
+        <sql dbms="postgresql" endDelimiter=";" splitStatements="false">
+            UPDATE subscriptions set cancelled = false;
+        </sql>
+        <addNotNullConstraint tableName="subscriptions" columnName="cancelled" />
+    </changeSet>
+
 </databaseChangeLog>

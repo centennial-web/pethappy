@@ -9,6 +9,7 @@ import java.util.Locale;
 
 public class NumberFormatter {
     private static final DecimalFormat df2 = (DecimalFormat) NumberFormat.getNumberInstance(Locale.CANADA);
+    private static final DecimalFormat dfp = (DecimalFormat) NumberFormat.getPercentInstance(Locale.CANADA);
 
     private static NumberFormatter ourInstance = new NumberFormatter();
 
@@ -26,6 +27,12 @@ public class NumberFormatter {
 
         // Set symbol to formatter
         df2.setDecimalFormatSymbols(symbols2);
+
+
+        //
+        // Percentage
+        //
+        dfp.setMinimumFractionDigits(1);
     }
 
     public static NumberFormatter getInstance() {
@@ -37,5 +44,9 @@ public class NumberFormatter {
 
     public String formatNumber2(BigDecimal n) {
         return df2.format(n.setScale(2, BigDecimal.ROUND_HALF_EVEN));
+    }
+
+    public String formatPercentage(BigDecimal n) {
+        return dfp.format(n.movePointLeft(2));
     }
 }
