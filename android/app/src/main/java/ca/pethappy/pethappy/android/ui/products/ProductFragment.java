@@ -25,6 +25,7 @@ import ca.pethappy.pethappy.android.App;
 import ca.pethappy.pethappy.android.R;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
+import ca.pethappy.pethappy.android.models.backend.projections.Recommendation;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.cart.CartListener;
 import ca.pethappy.pethappy.android.ui.main.MainActivity;
@@ -56,6 +57,9 @@ public class ProductFragment extends BaseFragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        // Show recommendations
+        getRecommendations();
 
         // AdaptergetPackageName
         productAdapter = new ProductAdapter(new ProductAdapter.ProductAdapterEventsListener() {
@@ -99,6 +103,17 @@ public class ProductFragment extends BaseFragment {
         searchProducts();
 
         return rootView;
+    }
+
+    private void getRecommendations() {
+        final App app = getApp();
+        new SimpleTask<Void, List<Recommendation>>(
+                ignored -> app.productsService.getRecommendations(),
+                recommendations -> {
+                    Toast.makeText(getActivity(), "Count: " + recommendations.size(), Toast.LENGTH_SHORT).show();
+                },
+                error -> {}
+        ).execute((Void)null);
     }
 
     private void searchProducts() {

@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <include
-            layout="@layout/fragment_subscription_recyclerview_item_card_content2"
+            layout="@layout/fragment_subscription_recyclerview_item_card_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </android.support.v7.widget.CardView>

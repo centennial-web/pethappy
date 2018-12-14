@@ -3,6 +3,7 @@ package ca.pethappy.server.services;
 import ca.pethappy.server.models.Product;
 import ca.pethappy.server.repositories.ProductsRepository;
 import ca.pethappy.server.repositories.projections.ProductWithoutDescription;
+import ca.pethappy.server.repositories.projections.Recommendation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,5 +38,10 @@ public class OldProductsService {
     @Transactional(readOnly = true)
     public Product findById(Long id) {
         return productsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Recommendation> recommendations() {
+        return productsRepository.getRecommendations();
     }
 }

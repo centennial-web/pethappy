@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
+import ca.pethappy.pethappy.android.models.backend.SubscriptionItem;
 import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForDetails;
 import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForListing;
 import ca.pethappy.pethappy.android.models.forms.SubscriptionForm;
@@ -42,4 +43,14 @@ public class SubscriptionService {
         }
         throw new IOException("Couldn't find subscription");
     }
+
+    public List<SubscriptionItem> subscriptionItems(Long subscriptionId) throws IOException {
+        Response<List<SubscriptionItem>> response = app.endpoints.subscriptionItems(subscriptionId).execute();
+        List<SubscriptionItem> payload;
+        if (response.isSuccessful() && (payload = response.body()) != null) {
+            return payload;
+        }
+        throw new IOException("Couldn't list subscription items");
+    }
+
 }

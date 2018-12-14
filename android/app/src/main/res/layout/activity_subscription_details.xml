@@ -32,7 +32,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/everyTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -47,21 +47,62 @@
                 tools:text="Every 2 months on day 10" />
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/creationDateTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+                app:layout_constraintTop_toBottomOf="@+id/everyTxt"
+                tools:text="Subscribed on Dec 03, 2018" />
+
+            <TextView
+                android:id="@+id/totalBeforeTaxTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/creationDateTxt"
+                tools:text="totalBeforeTaxTxt" />
+
+            <TextView
+                android:id="@+id/taxesPercentTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/totalBeforeTaxTxt"
+                tools:text="taxesPercentTxt" />
+
+            <TextView
+                android:id="@+id/taxesValueTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@+id/taxesPercentTxt"
+                app:layout_constraintTop_toBottomOf="@+id/totalBeforeTaxTxt"
+                tools:text="taxesValueTxt" />
+
+            <TextView
+                android:id="@+id/totalTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/taxesValueTxt"
+                tools:text="totalTxt" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -75,7 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <View
         android:id="@+id/divider4"
@@ -96,8 +137,9 @@
         android:paddingEnd="8dp"
         android:paddingBottom="4dp"
         android:text="Subscription Items"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/design_default_color_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />

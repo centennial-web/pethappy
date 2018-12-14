@@ -8,8 +8,10 @@ import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.backend.Card;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.Product;
+import ca.pethappy.pethappy.android.models.backend.SubscriptionItem;
 import ca.pethappy.pethappy.android.models.backend.projections.OrderForListing;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
+import ca.pethappy.pethappy.android.models.backend.projections.Recommendation;
 import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForDetails;
 import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForListing;
 import ca.pethappy.pethappy.android.models.forms.AddCartItem;
@@ -79,6 +81,12 @@ public interface Endpoints {
     @GET("/api/subscriptions/details/{id}")
     Call<SubscriptionForDetails> subscription(@Path("id") Long id);
 
+    @GET("/api/subscriptions/details/{id}/items")
+    Call<List<SubscriptionItem>> subscriptionItems(@Path("id") Long id);
+
     @GET("/api/orders/listing/{subscriptionId}")
     Call<List<OrderForListing>> ordersForListings(@Path("subscriptionId") Long subscriptionId);
+
+    @GET("/api/products/recommendations")
+    Call<List<Recommendation>> getRecommendations();
 }

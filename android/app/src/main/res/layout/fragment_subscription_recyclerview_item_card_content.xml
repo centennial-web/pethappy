@@ -2,76 +2,110 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:id="@+id/cancelledLayout"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/accentColor"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/deliveryEveryTxt"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:backgroundTint="#80000000"
+            android:gravity="center|bottom"
+            android:paddingBottom="2dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            tools:text="Every 2 months" />
+
+        <View
+            android:id="@+id/divisor"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="0"
+            android:background="@android:color/white" />
+
+        <TextView
+            android:id="@+id/preferredDayTxt"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center|top"
+            android:paddingTop="1dp"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            tools:text="on day 19" />
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/subscribedDataTxt"
+        android:id="@+id/creationDateTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cancelledLayout"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Subscribed: Dec 6, 2018" />
+        tools:text="creationDateTxt" />
 
     <TextView
-        android:id="@+id/deliveryEveryTxt"
+        android:id="@+id/totalBeforeTaxTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subscribedDataTxt"
-        tools:text="Delivery every 1 month on day 23" />
+        app:layout_constraintStart_toEndOf="@+id/cancelledLayout"
+        app:layout_constraintTop_toBottomOf="@+id/creationDateTxt"
+        tools:text="totalBeforeTaxTxt" />
 
     <TextView
-        android:id="@+id/numberOfItemsTxt"
+        android:id="@+id/taxesPercentTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deliveryEveryTxt"
-        tools:text="10 items" />
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/cancelledLayout"
+        app:layout_constraintTop_toBottomOf="@+id/totalBeforeTaxTxt"
+        tools:text="taxesPercentTxt" />
 
     <TextView
-        android:id="@+id/itemsTotalTxt"
+        android:id="@+id/taxesValueTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@android:color/holo_green_dark"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numberOfItemsTxt"
-        tools:text="CDN$ 234.90" />
+        app:layout_constraintStart_toEndOf="@+id/taxesPercentTxt"
+        app:layout_constraintTop_toBottomOf="@+id/totalBeforeTaxTxt"
+        tools:text="taxesValueTxt" />
 
     <TextView
-        android:id="@+id/numberOfDeliveriesTxt"
-        android:layout_width="0dp"
+        android:id="@+id/totalTxt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemsTotalTxt"
-        app:layout_constraintVertical_bias="0.0"
-        tools:text="Number of deliveries: 2" />
-
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/cancelledLayout"
+        app:layout_constraintTop_toBottomOf="@+id/taxesPercentTxt"
+        tools:text="totalTxt" />
 </android.support.constraint.ConstraintLayout>

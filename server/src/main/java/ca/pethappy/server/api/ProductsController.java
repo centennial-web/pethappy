@@ -44,4 +44,13 @@ public class ProductsController {
             return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/api/products/recommendations")
+    public ResponseEntity<?> recommendations() {
+        try {
+            return new ResponseEntity<>(oldProductsService.recommendations(), HttpStatus.OK);
+        } catch (Throwable t) {
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
