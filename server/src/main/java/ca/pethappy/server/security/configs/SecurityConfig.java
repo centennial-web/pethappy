@@ -78,8 +78,13 @@ public class SecurityConfig {
             http
 //                    .antMatcher("/api/user").authorizeRequests()
                     .antMatcher("/**").authorizeRequests()
-                    .mvcMatchers(HttpMethod.POST, "/api/user").anonymous()
-                    .mvcMatchers(HttpMethod.POST, "/api/register").permitAll()
+                    // Graphql
+//                    .antMatchers(HttpMethod.POST, "/graphql/**").authenticated()
+                    // Auth
+                    .antMatchers(HttpMethod.POST, "/api/user").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/register").permitAll()
+                    // Favicon
+                    .antMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .cors().configurationSource(corsConfigurationSource).and()

@@ -97,4 +97,7 @@
         <item>30</item>
         <item>31</item>
     </string-array>
+
+    <!--Search-->
+    <string name="search_hint">Search products</string>
 </resources>

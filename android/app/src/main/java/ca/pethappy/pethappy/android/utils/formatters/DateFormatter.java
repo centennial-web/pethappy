@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateFormatter {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.CANADA);
+    private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+    private static SimpleDateFormat sdf2 = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.US);
     private static final DateFormatter ourInstance = new DateFormatter();
 
     public static DateFormatter getInstance() {
@@ -15,7 +16,11 @@ public class DateFormatter {
     private DateFormatter() {
     }
 
-    public String formatDateTime(Date dateTime) {
+    public String formatDateTimeShort(Date dateTime) {
         return sdf.format(dateTime);
+    }
+
+    public String formatDateTimeMid(Date dateTime) {
+        return sdf2.format(dateTime);
     }
 }

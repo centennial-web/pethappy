@@ -1,30 +1,25 @@
 package ca.pethappy.server.models;
 
-import javax.persistence.*;
+import io.leangen.graphql.annotations.GraphQLQuery;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "manufacturers")
 public class Manufacturer {
-    private Long id;
-    private String name;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "bigserial")
-    public Long getId() {
-        return id;
-    }
+    @GraphQLQuery(name = "id", description = "A manufacturer's id")
+    private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @NotNull
     @Column(name = "name", length = 100, nullable = false)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @GraphQLQuery(name = "name", description = "A manufacturer's name")
+    private String name;
 }

@@ -19,19 +19,19 @@ public class SubscriptionsService {
     private final SubscriptionsRepository subscriptionsRepository;
     private final UsersService usersService;
     private final CardsService cardsService;
-    private final ProductsService productsService;
+    private final OldProductsService oldProductsService;
     private final CartsService cartsService;
 
     @Autowired
     public SubscriptionsService(SubscriptionsRepository subscriptionsRepository,
                                 UsersService usersService,
                                 CardsService cardsService,
-                                ProductsService productsService,
+                                OldProductsService oldProductsService,
                                 CartsService cartsService) {
         this.subscriptionsRepository = subscriptionsRepository;
         this.usersService = usersService;
         this.cardsService = cardsService;
-        this.productsService = productsService;
+        this.oldProductsService = oldProductsService;
         this.cartsService = cartsService;
     }
 
@@ -68,7 +68,7 @@ public class SubscriptionsService {
         // Create subscription items
         for (SubscriptionItemForm itemForm : subscriptionForm.getItems()) {
             // Locate product
-            Product product = productsService.findById(itemForm.getProductId());
+            Product product = oldProductsService.findById(itemForm.getProductId());
 
             SubscriptionItem item = new SubscriptionItem();
             item.setSubscription(subscription);

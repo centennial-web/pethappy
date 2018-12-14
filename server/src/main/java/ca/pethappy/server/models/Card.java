@@ -1,79 +1,36 @@
 package ca.pethappy.server.models;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "cards")
 public class Card {
-    private Long id;
-    private User user;
-    private String number;
-    private int expMonth;
-    private int expYear;
-    private String nameOnCard;
-    private int cvv;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "bigserial")
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
-    }
+    private User user;
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
+    @Column
+    private String number;
 
     @Column(name = "exp_month")
-    public int getExpMonth() {
-        return expMonth;
-    }
-
-    public void setExpMonth(int expMonth) {
-        this.expMonth = expMonth;
-    }
+    private int expMonth;
 
     @Column(name = "exp_year")
-    public int getExpYear() {
-        return expYear;
-    }
-
-    public void setExpYear(int expYear) {
-        this.expYear = expYear;
-    }
+    private int expYear;
 
     @Column(name = "name_on_card")
-    public String getNameOnCard() {
-        return nameOnCard;
-    }
+    private String nameOnCard;
 
-    public void setNameOnCard(String nameOnCard) {
-        this.nameOnCard = nameOnCard;
-    }
-
-    public int getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(int cvv) {
-        this.cvv = cvv;
-    }
+    @Column
+    private int cvv;
 }

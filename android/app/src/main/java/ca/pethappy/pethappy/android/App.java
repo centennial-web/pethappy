@@ -19,6 +19,7 @@ import ca.pethappy.pethappy.android.consts.Consts;
 import ca.pethappy.pethappy.android.models.DecodedToken;
 import ca.pethappy.pethappy.android.services.CartServices;
 import ca.pethappy.pethappy.android.services.OrdersService;
+import ca.pethappy.pethappy.android.services.ProductsService;
 import ca.pethappy.pethappy.android.services.SubscriptionService;
 import ca.pethappy.pethappy.android.services.UserServices;
 import ca.pethappy.pethappy.android.utils.moshi.BigDecimalAdapter;
@@ -42,6 +43,7 @@ public class App extends Application {
     public UserServices userServices;
     public SubscriptionService subscriptionService;
     public OrdersService ordersService;
+    public ProductsService productsService;
 
     // Json
     public Moshi moshi;
@@ -60,6 +62,7 @@ public class App extends Application {
         this.userServices = new UserServices(this);
         this.subscriptionService = new SubscriptionService(this);
         this.ordersService = new OrdersService(this);
+        this.productsService = new ProductsService(this);
 
         // Prefs
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);

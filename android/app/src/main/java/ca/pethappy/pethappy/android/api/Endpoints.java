@@ -8,7 +8,6 @@ import ca.pethappy.pethappy.android.models.User;
 import ca.pethappy.pethappy.android.models.backend.Card;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.Product;
-import ca.pethappy.pethappy.android.models.backend.Subscription;
 import ca.pethappy.pethappy.android.models.backend.projections.OrderForListing;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.models.backend.projections.SubscriptionForDetails;
@@ -38,7 +37,7 @@ public interface Endpoints {
     Call<Page<Product>> productsFindAll();
 
     @GET("/api/products/findAllWithoutDescription")
-    Call<Page<ProductWithoutDescription>> productsFindAllWithoutDescription();
+    Call<List<ProductWithoutDescription>> productsFindAllWithoutDescription(@Query("query") String query);
 
     @GET("/api/products/findById/{id}")
     Call<Product> productsFindById(@Path("id") Long id);

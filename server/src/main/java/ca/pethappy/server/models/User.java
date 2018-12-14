@@ -1,6 +1,8 @@
 package ca.pethappy.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,199 +10,69 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
-    private Long id;
-    private String email;
-    private String password;
-    private boolean active;
-    private String firstName;
-    private String lastName;
-    private String cellPhone;
-    private String address;
-    private String unit;
-    private String postalCode;
-    private String city;
-    private String province;
-    private String buzzer;
-    private Set<Role> roles;
-    private boolean use2fa;
-    private String verificationCode;
-    private boolean confirmed;
-    private List<Card> cards;
-
-    public User() {
-        roles = new HashSet<>();
-        cards = new ArrayList<>();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "bigserial")
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Long id;
 
     @Column(nullable = false, unique = true)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private String email;
 
     @Column(nullable = false)
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String password;
 
     @Column
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    private boolean active;
 
     @Column(name = "first_name", nullable = false)
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    private String lastName;
 
     @Column(name = "cell_phone", nullable = false)
-    public String getCellPhone() {
-        return cellPhone;
-    }
-
-    public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
-    }
+    private String cellPhone;
 
     @Column(name = "address", nullable = false)
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    private String address;
 
     @Column
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
+    private String unit;
 
     @Column(name = "postal_code", nullable = false)
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
+    private String postalCode;
 
     @Column(name = "city", nullable = false)
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
+    private String city;
 
     @Column(nullable = false)
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
+    private String province;
 
     @Column
-    public String getBuzzer() {
-        return buzzer;
-    }
-
-    public void setBuzzer(String buzzer) {
-        this.buzzer = buzzer;
-    }
+    private String buzzer;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "use2fa", nullable = false)
-    public boolean isUse2fa() {
-        return use2fa;
-    }
-
-    public void setUse2fa(boolean use2fa) {
-        this.use2fa = use2fa;
-    }
+    private boolean use2fa;
 
     @Column(name = "verification_code")
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
+    private String verificationCode;
 
     @Column(name = "confirmed", nullable = false)
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
-    }
+    private boolean confirmed;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
-    }
+    private List<Card> cards = new ArrayList<>();
 }

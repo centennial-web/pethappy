@@ -2,7 +2,6 @@ package ca.pethappy.pethappy.android.ui.subscriptions;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -47,7 +46,7 @@ public class SubscriptionDetailsActivity extends BaseAuthenticatedActivity {
                 error -> {
                     Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-        ).execute((Void)null);
+        ).execute((Void) null);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class SubscriptionDetailsActivity extends BaseAuthenticatedActivity {
         SubscriptionForDetails subscription;
         List<OrderForListing> orders;
 
-        public Payload(SubscriptionForDetails subscription, List<OrderForListing> orders) {
+        Payload(SubscriptionForDetails subscription, List<OrderForListing> orders) {
             this.subscription = subscription;
             this.orders = orders;
         }

@@ -51,8 +51,8 @@ public class TokenService {
                     .withClaim("id", user.getId())
                     .sign(algorithm);
         } catch (JWTCreationException ex) {
-            logger.error("Cannot properly create token", ex);
-            throw new TokenCreationException("Cannot properly create token", ex);
+            logger.error("Cannot properly save token", ex);
+            throw new TokenCreationException("Cannot properly save token", ex);
         }
     }
 

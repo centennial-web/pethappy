@@ -33,6 +33,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--Cache-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
         <!--Configs-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -45,6 +51,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <!--Lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <!--Test-->
@@ -107,7 +119,47 @@
             <version>7.32.0</version>
         </dependency>
 
+        <!--GraphQL-->
+        <dependency>
+            <groupId>io.leangen.graphql</groupId>
+            <artifactId>spqr</artifactId>
+            <version>0.9.9</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.graphql-java-kickstart</groupId>-->
+            <!--<artifactId>graphql-spring-boot-starter</artifactId>-->
+            <!--<version>5.2</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.graphql-java-kickstart</groupId>-->
+            <!--<artifactId>graphiql-spring-boot-starter</artifactId>-->
+            <!--<version>5.2</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.graphql-java-kickstart</groupId>-->
+            <!--<artifactId>voyager-spring-boot-starter</artifactId>-->
+            <!--<version>5.2</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.graphql-java-kickstart</groupId>-->
+            <!--<artifactId>graphql-spring-boot-starter-test</artifactId>-->
+            <!--<version>5.2</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
     </dependencies>
+
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>oss-snapshot-local</id>-->
+            <!--<name>jfrog</name>-->
+            <!--<url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
     <build>
         <plugins>

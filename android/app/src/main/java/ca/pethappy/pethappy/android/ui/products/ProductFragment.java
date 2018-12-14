@@ -4,10 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -17,21 +23,24 @@ import java.util.List;
 
 import ca.pethappy.pethappy.android.App;
 import ca.pethappy.pethappy.android.R;
-import ca.pethappy.pethappy.android.api.page.Page;
 import ca.pethappy.pethappy.android.models.backend.CartItem;
 import ca.pethappy.pethappy.android.models.backend.projections.ProductWithoutDescription;
 import ca.pethappy.pethappy.android.ui.base.fragments.BaseFragment;
 import ca.pethappy.pethappy.android.ui.cart.CartListener;
+import ca.pethappy.pethappy.android.ui.main.MainActivity;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
-import retrofit2.Response;
 
 public class ProductFragment extends BaseFragment {
     private ProductAdapter productAdapter;
     private CartListener cartListener;
     private SwipeRefreshLayout swipeContainer;
+    private ProductFragmentListener productFragmentListener;
+
+    private String lastQuery;
 
     public ProductFragment() {
         // Required empty public constructor
+        lastQuery = "";
     }
 
     @Override
@@ -42,7 +51,7 @@ public class ProductFragment extends BaseFragment {
 
         // Swipe to refresh
         swipeContainer = rootView.findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(this::queryProducts);
+        swipeContainer.setOnRefreshListener(this::searchProducts);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -87,20 +96,17 @@ public class ProductFragment extends BaseFragment {
         recyclerView.setAdapter(productAdapter);
 
         // Query products
-        queryProducts();
+        searchProducts();
 
         return rootView;
     }
 
-    private void queryProducts() {
+    private void searchProducts() {
         final App app = getApp();
-        new SimpleTask<Void, Page<ProductWithoutDescription>>(
-                none -> {
-                    Response<Page<ProductWithoutDescription>> response = app.endpoints.productsFindAllWithoutDescription().execute();
-                    return (response.isSuccessful()) ? response.body() : new Page<>();
-                },
+        new SimpleTask<Void, List<ProductWithoutDescription>>(
+                ignored -> app.productsService.productsFindAllWithoutDescription(lastQuery),
                 payload -> {
-                    productAdapter.updateData(payload.content);
+                    productAdapter.updateData(payload);
                     swipeContainer.setRefreshing(false);
                 },
                 error -> {
@@ -114,11 +120,62 @@ public class ProductFragment extends BaseFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        // Cart Listener
         if (context instanceof CartListener) {
             cartListener = (CartListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
+
+        // Product fragment listener
+        if (context instanceof ProductFragmentListener) {
+            productFragmentListener = (ProductFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement ProductFragmentListener");
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MainActivity mainActivity;
+        ActionBar actionBar;
+        if ((mainActivity = ((MainActivity) getActivity())) != null && (actionBar = mainActivity.getSupportActionBar()) != null) {
+            inflater.inflate(R.menu.fragment_product_menu, menu);
+            MenuItem item = menu.findItem(R.id.action_search);
+            SearchView searchView = new SearchView(actionBar.getThemedContext());
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            item.setActionView(searchView);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if (productFragmentListener != null) {
+                        productFragmentListener.onQueryProductTextSubmit(query);
+                    }
+                    lastQuery = query;
+                    searchProducts();
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newQuery) {
+                    if (newQuery.equals("") && lastQuery.equals("")) {
+                        return false;
+                    }
+
+                    lastQuery = newQuery;
+                    if (lastQuery.equals("")) {
+                        searchProducts();
+                    }
+                    return false;
+                }
+            });
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onActivityCreated(savedInstanceState);
     }
 }

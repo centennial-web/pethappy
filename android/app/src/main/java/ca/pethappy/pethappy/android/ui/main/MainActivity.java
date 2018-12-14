@@ -23,6 +23,7 @@ import ca.pethappy.pethappy.android.ui.cart.CartFragment;
 import ca.pethappy.pethappy.android.ui.cart.CartListener;
 import ca.pethappy.pethappy.android.ui.login.LoginActivity;
 import ca.pethappy.pethappy.android.ui.products.ProductFragment;
+import ca.pethappy.pethappy.android.ui.products.ProductFragmentListener;
 import ca.pethappy.pethappy.android.ui.profile.ProfileFragment;
 import ca.pethappy.pethappy.android.ui.settings.SettingsFragment;
 import ca.pethappy.pethappy.android.ui.subscriptions.SubscriptionsFragment;
@@ -31,9 +32,11 @@ import ca.pethappy.pethappy.android.utils.badge.QBadgeView;
 import ca.pethappy.pethappy.android.utils.navigator.BottomNavigationViewEx;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
-public class MainActivity extends BaseAuthenticatedActivity implements OnFragmentInteractionListener,
+public class MainActivity extends BaseAuthenticatedActivity implements
+        OnFragmentInteractionListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
-        CartListener {
+        CartListener,
+        ProductFragmentListener {
     private static final int OPEN_SUBSCRIPTIONS_REQUEST = 1;
     private static final int OPEN_SETTINGS_REQUEST = 2;
 
@@ -74,6 +77,7 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
         navigation.setOnNavigationItemSelectedListener(this);
         navigation.enableAnimation(false);
         navigation.setItemHorizontalTranslationEnabled(false);
+        navigation.setTextSize(10);
 
         // Badge
         badge = new QBadgeView(this)
@@ -99,6 +103,14 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+
+//        // Associate searchable configuration with the SearchView
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        searchView.setSubmitButtonEnabled(true);
+//        searchView.setOnQueryTextListener(this);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -231,5 +243,10 @@ public class MainActivity extends BaseAuthenticatedActivity implements OnFragmen
         }
         // Update number
         badge.setBadgeNumber(number);
+    }
+
+    @Override
+    public void onQueryProductTextSubmit(String query) {
+
     }
 }

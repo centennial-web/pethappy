@@ -9,12 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
-public class ProductsService {
+public class OldProductsService {
     private final ProductsRepository productsRepository;
 
     @Autowired
-    public ProductsService(ProductsRepository productsRepository) {
+    public OldProductsService(ProductsRepository productsRepository) {
         this.productsRepository = productsRepository;
     }
 
@@ -24,8 +26,12 @@ public class ProductsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductWithoutDescription> findAllWithoutDescription(Pageable pageable) {
-        return productsRepository.findAllBy(pageable);
+    public List<ProductWithoutDescription> findAllWithoutDescription(String query) {
+        if (query == null || query.trim().equals("")) {
+            return productsRepository.findAllBy();
+        } else {
+            return productsRepository.queryAllByTerm(query.toUpperCase());
+        }
     }
 
     @Transactional(readOnly = true)

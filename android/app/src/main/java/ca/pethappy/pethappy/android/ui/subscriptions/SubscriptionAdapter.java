@@ -60,7 +60,7 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
         // Fill the views
         viewHolder.deliveryEveryTxt.setText("Every " + subscription.deliveryEvery + (subscription.deliveryEvery == 1 ? " month" : " months"));
         viewHolder.preferredDayTxt.setText("on day " + subscription.preferredDay);
-        viewHolder.creationDateTxt.setText("Subscribed on " + DateFormatter.getInstance().formatDateTime(subscription.creationDate));
+        viewHolder.creationDateTxt.setText("Subscribed on " + DateFormatter.getInstance().formatDateTimeMid(subscription.creationDate));
         viewHolder.totalBeforeTaxTxt.setText("Total before taxes CDN$ " + NumberFormatter.getInstance().formatNumber2(subscription.totalBeforeTax));
         viewHolder.taxesPercentTxt.setText("Taxes " + NumberFormatter.getInstance().formatPercentage(subscription.taxesPercent));
         viewHolder.taxesValueTxt.setText(" / CDN$ " + NumberFormatter.getInstance().formatNumber2(subscription.taxesValue));

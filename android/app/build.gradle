@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.apollographql.android'
 
 android {
     compileSdkVersion 28
@@ -60,4 +61,8 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryLibVersion}"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryLibVersion}"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${leakCanaryLibVersion}"
+
+    // Apollo
+//    implementation "com.apollographql.apollo:apollo-runtime:$apolloReleaseVersion"
+//    implementation "com.apollographql.apollo:apollo-android-support:$apolloReleaseVersion"
 }
