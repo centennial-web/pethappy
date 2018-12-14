@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -31,8 +32,11 @@ import ca.pethappy.pethappy.android.ui.cart.CartListener;
 import ca.pethappy.pethappy.android.ui.main.MainActivity;
 import ca.pethappy.pethappy.android.utils.task.SimpleTask;
 
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
+
 public class ProductFragment extends BaseFragment {
     private ProductAdapter productAdapter;
+    private RecommendationAdapter recommendationAdapter;
     private CartListener cartListener;
     private SwipeRefreshLayout swipeContainer;
     private ProductFragmentListener productFragmentListener;
@@ -59,7 +63,7 @@ public class ProductFragment extends BaseFragment {
                 android.R.color.holo_red_light);
 
         // Show recommendations
-        getRecommendations();
+        showRecommendations();
 
         // AdaptergetPackageName
         productAdapter = new ProductAdapter(new ProductAdapter.ProductAdapterEventsListener() {
@@ -99,21 +103,35 @@ public class ProductFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(productAdapter);
 
+        recommendationAdapter = new RecommendationAdapter((recommendation, v) -> {
+            Intent productDetailsIntent = new Intent(getContext(), ProductDetailsActivity.class);
+            productDetailsIntent.putExtra(ProductDetailsActivity.EXTRA_PRODUCT_ID, recommendation.id);
+            startActivity(productDetailsIntent);
+        });
+
+        // Recycler view
+        RecyclerView recommendationRecyclerView = rootView.findViewById(R.id.recommendationRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recommendationRecyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
+        recommendationRecyclerView.addItemDecoration(itemDecor);
+        recommendationRecyclerView.setAdapter(recommendationAdapter);
+
         // Query products
         searchProducts();
 
         return rootView;
     }
 
-    private void getRecommendations() {
+    private void showRecommendations() {
         final App app = getApp();
         new SimpleTask<Void, List<Recommendation>>(
                 ignored -> app.productsService.getRecommendations(),
-                recommendations -> {
-                    Toast.makeText(getActivity(), "Count: " + recommendations.size(), Toast.LENGTH_SHORT).show();
-                },
-                error -> {}
-        ).execute((Void)null);
+                recommendations -> recommendationAdapter.updateData(recommendations),
+                error -> {
+                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        ).execute((Void) null);
     }
 
     private void searchProducts() {
